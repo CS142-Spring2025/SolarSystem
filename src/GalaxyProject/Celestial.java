@@ -37,11 +37,12 @@ public class Celestial {
         return size;
     }
     
-    // A setX method that sets the x position
+    // A setX method that sets the updated x position
     public void setX(double x) {
         this.x = x;
     }
-    // A setY method that sets the y position
+    
+    // A setY method that sets the updated y position
     public void setY(double y) {
         this.y = y;
     }
