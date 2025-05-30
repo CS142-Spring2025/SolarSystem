@@ -37,14 +37,23 @@ public class Celestial {
         return size;
     }
     
+    // A setX method that sets the x position
+    public void setX(double x) {
+        this.x = x;
+    }
+    // A setY method that sets the y position
+    public void setY(double y) {
+        this.y = y;
+    }
+    
     // A update method that returns nothing and will be overriden by subclasses
     public void update() {
-        
+        return;
     }
     
     // A draw method that returns nothing and will be overriden by subclasses
     public void draw(Graphics g) {
-        
+        return;
     }
     
     // A getType method that returns an error if type cannot be found
