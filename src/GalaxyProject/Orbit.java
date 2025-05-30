@@ -52,7 +52,7 @@ public class Orbit extends Celestial {
     }
     
     // An overriden update method which updates the position's of the x and y coordinates
-    // Ensuring that it says within 0 and 2PI
+    // Ensuring that it stays within 0 and 2PI
     @Override
     public void update() {
         angle += speed;
