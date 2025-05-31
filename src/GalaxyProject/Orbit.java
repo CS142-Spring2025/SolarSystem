@@ -9,8 +9,8 @@ public class Orbit extends Celestial {
     private double angle;
     
     // A Orbit constructor which initializes the XCenter coordinate, YCenter coordinate, radius, speed, and angle
-    // Calls the super for the to initialize x coordinate, y coordinate, mass and size
-    public Orbit(double XCenter, double YCenter, double radius, double speed, double angle, double mass, int size) {
+    // Calls a super to initialize center x and y coordinates, mass and size
+    public Orbit(double XCenter, double YCenter, double radius, double speed, double mass, int size) {
         super(XCenter + radius, YCenter, mass, size);
         
         this.XCenter = XCenter;
@@ -56,9 +56,11 @@ public class Orbit extends Celestial {
     @Override
     public void update() {
         angle += speed;
+        
         if (angle > 2 * Math.PI) {
             angle -= 2 * Math.PI;
         }   
+        
         setX(XCenter + radius * Math.cos(angle));
         setY(YCenter + radius * Math.sin(angle));
     }

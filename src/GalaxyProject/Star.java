@@ -5,7 +5,7 @@ import java.awt.*;
 // A Star class extends the superclass Celestial
 public class Star extends Celestial {
     
-    // A Star constructor which calls the super for the x and y coordinates, with mass 1500 and size 30
+    // A Star constructor which calls the super to initialize the x and y coordinates, with mass 1500 and size 30
     public Star(double x, double y) {
         super(x, y, 1500, 30);
     }
