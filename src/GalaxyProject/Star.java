@@ -10,7 +10,8 @@ public class Star extends Celestial {
         super(x, y, 1500, 30);
     }
     
-    // A update method that returns nothing because in this case the sun (A dwarf star) is not moving
+    // An overriden update method that returns nothing because in this case the sun (A dwarf star) is not moving
+    @Override
     public void update() {
         return;
     }
