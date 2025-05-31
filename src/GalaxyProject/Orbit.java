@@ -1,6 +1,7 @@
 package GalaxyProject;
 
 // Uses a Orbit class that stores the XCenter coordinate, YCenter coordinate, radius, speed, and angle for the orbit
+// A Orbit class extends the superclass Celestial 
 public class Orbit extends Celestial {
     private double XCenter;
     private double YCenter;

@@ -6,6 +6,7 @@ import java.awt.*;
 public class Planet extends Orbit{
     
     // A Planet constructor which calls the super for the star's x and y coordinates, the orbit's radius and speed, and mass 850 and speed 20
+    // Grabs star's coordinates in order to know the center point and orbit around it
     public Planet(Star star, double radius, double speed) {
         super(star.getX(), star.getY(), radius, speed, 850, 20);
     }

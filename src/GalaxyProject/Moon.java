@@ -1,6 +1,8 @@
 
 package GalaxyProject;
 
-public class Moon {
-    //TESTING
+public class Moon extends Orbit {
+    public Moon() {
+        
+    }
 }
