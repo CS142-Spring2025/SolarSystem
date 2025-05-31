@@ -5,7 +5,7 @@
  * 5/29/2025
  * 
  */
-/*
+/*ZZZZZZZZZZZZZZZ - old file, will delete - was under the assumpiton we would use a grid to place and control objects, updataing to use pixelated placements and individual control of movement with each object
  * The brains of the simulation - this file will sotre the grid of celestial objects (Celestial[][] grid)
  * it will place the objects at the beginning of the simulation
  * it will advance the sijmulation each tick (by calling each objects update())
@@ -15,7 +15,7 @@
 import java.util.Random;
 
 public class GalaxySimulationGrid {
-    private Celestial[][] grid;
+    private ArrayList<Celestial>objects; //holds all celestial objects
     private int width;
     private int height;
     
