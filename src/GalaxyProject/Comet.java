@@ -1,20 +1,16 @@
+
+        
 package GalaxyProject;
 
-public class Comet {
-
-// Comet class - similar to asteroid but with tail effect
 public class Comet extends Celestial {
-    private double dx, dy; // Direction of movement
-    private double tailLength;
+    private double dx, dy, tailLength;
     private static final Random random = new Random();
     
     public Comet(String name) {
         super(name);
-        this.size = 6 + random.nextInt(8); // Size between 6-14 pixels
-        this.mass = size * 0.3; // Lighter than asteroids
-        this.tailLength = size * 3; // Tail length proportional to size
-        
-        // Initialize from edge like asteroids
+        this.size = 6 + random.nextInt(8);
+        this.mass = size * 0.3;
+        this.tailLength = size * 3;
         initializeFromEdge();
         initializeMovement();
     }
@@ -29,102 +25,55 @@ public class Comet extends Celestial {
     }
     
     private void initializeFromEdge() {
-        int gridWidth = 800;
-        int gridHeight = 600;
-        
         int edge = random.nextInt(4);
-        
-        switch(edge) {
-            case 0: // Top edge
-                this.x = random.nextDouble() * gridWidth;
-                this.y = -size;
-                break;
-            case 1: // Right edge
-                this.x = gridWidth + size;
-                this.y = random.nextDouble() * gridHeight;
-                break;
-            case 2: // Bottom edge
-                this.x = random.nextDouble() * gridWidth;
-                this.y = gridHeight + size;
-                break;
-            case 3: // Left edge
-                this.x = -size;
-                this.y = random.nextDouble() * gridHeight;
-                break;
-        }
+        double[] pos = {random.nextDouble() * 800, -size, 800 + size, random.nextDouble() * 600, 
+                       random.nextDouble() * 800, 600 + size, -size, random.nextDouble() * 600};
+        this.x = pos[edge * 2];
+        this.y = pos[edge * 2 + 1];
     }
     
     private void initializeMovement() {
-        double centerX = 400;
-        double centerY = 300;
+        double dirX = 400 - this.x, dirY = 300 - this.y;
+        double dist = Math.sqrt(dirX * dirX + dirY * dirY);
+        double speed = 2.0 + random.nextDouble() * 3.0;
         
-        double directionX = centerX - this.x;
-        double directionY = centerY - this.y;
-        
-        double distance = Math.sqrt(directionX * directionX + directionY * directionY);
-        double speed = 2.0 + random.nextDouble() * 3.0; // Faster than asteroids (2-5 pixels/tick)
-        
-        this.dx = (directionX / distance) * speed;
-        this.dy = (directionY / distance) * speed;
-        
-        // Add randomness
-        this.dx += (random.nextDouble() - 0.5) * 1.0;
-        this.dy += (random.nextDouble() - 0.5) * 1.0;
+        this.dx = (dirX / dist) * speed + (random.nextDouble() - 0.5);
+        this.dy = (dirY / dist) * speed + (random.nextDouble() - 0.5);
     }
     
     @Override
     public void update() {
-        // Linear movement (faster than asteroids)
         x += dx;
         y += dy;
     }
     
     @Override
     public void draw(Graphics2D g2d) {
-        Graphics2D g = (Graphics2D) g2d.create();
-        
-        // Draw tail first (behind the comet)
-        drawTail(g);
+        // Draw tail
+        double tailDx = -dx, tailDy = -dy;
+        double tailMag = Math.sqrt(tailDx * tailDx + tailDy * tailDy);
+        if (tailMag > 0) {
+            tailDx = (tailDx / tailMag) * tailLength;
+            tailDy = (tailDy / tailMag) * tailLength;
+            
+            for (int i = 0; i < 10; i++) {
+                double alpha = 1.0 - i / 10.0;
+                int tailX = (int)(x + tailDx * i / 10.0);
+                int tailY = (int)(y + tailDy * i / 10.0);
+                g2d.setColor(new Color(255, 255, 200, (int)(alpha * 100)));
+                g2d.fillOval(tailX - (size + i)/2, tailY - (size + i)/2, size + i, size + i);
+            }
+        }
         
         // Draw comet nucleus
-        g.setColor(new Color(200, 200, 255)); // Icy blue-white
-        g.fillOval((int)(x - size/2), (int)(y - size/2), size, size);
-        
-        // Add bright center
-        g.setColor(Color.WHITE);
-        g.fillOval((int)(x - size/4), (int)(y - size/4), size/2, size/2);
-        
-        g.dispose();
+        g2d.setColor(new Color(200, 200, 255));
+        g2d.fillOval((int)(x - size/2), (int)(y - size/2), size, size);
+        g2d.setColor(Color.WHITE);
+        g2d.fillOval((int)(x - size/4), (int)(y - size/4), size/2, size/2);
     }
     
-    private void drawTail(Graphics2D g) {
-        // Calculate tail direction (opposite to movement)
-        double tailDx = -dx;
-        double tailDy = -dy;
-        
-        // Normalize tail direction
-        double tailMagnitude = Math.sqrt(tailDx * tailDx + tailDy * tailDy);
-        if (tailMagnitude > 0) {
-            tailDx = (tailDx / tailMagnitude) * tailLength;
-            tailDy = (tailDy / tailMagnitude) * tailLength;
-        }
-        
-        // Draw tail as gradient
-        for (int i = 0; i < 10; i++) {
-            double alpha = 1.0 - (i / 10.0); // Fade out
-            int tailX = (int)(x + tailDx * i / 10.0);
-            int tailY = (int)(y + tailDy * i / 10.0);
-            int tailSize = size + i;
-            
-            g.setColor(new Color(255, 255, 200, (int)(alpha * 100))); // Yellowish tail
-            g.fillOval(tailX - tailSize/2, tailY - tailSize/2, tailSize, tailSize);
-        }
-    }
-    
-    // Getters for movement
     public double getDx() { return dx; }
     public double getDy() { return dy; }
     public void setDx(double dx) { this.dx = dx; }
     public void setDy(double dy) { this.dy = dy; }
-}
 }
