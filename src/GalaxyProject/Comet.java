@@ -1,5 +1,4 @@
-
-        
+   
 package GalaxyProject;
 
 public class Comet extends Celestial {
@@ -70,6 +69,36 @@ public class Comet extends Celestial {
         g2d.fillOval((int)(x - size/2), (int)(y - size/2), size, size);
         g2d.setColor(Color.WHITE);
         g2d.fillOval((int)(x - size/4), (int)(y - size/4), size/2, size/2);
+    }
+    
+    // Collision detection
+    public boolean collidesWith(Celestial other) {
+        double distance = Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2));
+        return distance < (size + other.getSize()) / 2;
+    }
+    
+    // Handle collision response (bounce off each other)
+    public void handleCollision(Comet other) {
+        // Simple elastic collision - swap velocities
+        double tempDx = this.dx;
+        double tempDy = this.dy;
+        this.dx = other.dx;
+        this.dy = other.dy;
+        other.dx = tempDx;
+        other.dy = tempDy;
+    }
+    
+    // Handle collision with asteroid (different masses)
+    public void handleCollision(Asteroid asteroid) {
+        // Conservation of momentum (simplified)
+        double totalMass = this.mass + asteroid.getMass();
+        double newDx = (this.mass * this.dx + asteroid.getMass() * asteroid.getDx()) / totalMass;
+        double newDy = (this.mass * this.dy + asteroid.getMass() * asteroid.getDy()) / totalMass;
+        
+        this.dx = newDx;
+        this.dy = newDy;
+        asteroid.setDx(newDx);
+        asteroid.setDy(newDy);
     }
     
     public double getDx() { return dx; }
