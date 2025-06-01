@@ -1,10 +1,6 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GalaxyMain {
-    // Store all celestial objects in a list
-    private static ArrayList<Celestial> galaxyObjects = new ArrayList<>();
-    
     // Maximum limits for each celestial object type
     private static final int MAX_STARS = 5;
     private static final int MAX_PLANETS = 10;
@@ -13,7 +9,7 @@ public class GalaxyMain {
     private static final int MAX_COMETS = 8;
     private static final int MAX_BLACK_HOLES = 2;
     
-    // Minimum requirements (optional - we can adjust or remove these)
+    // Minimum requirements
     private static final int MIN_STARS = 1;
     
     // Counters for each object type
@@ -39,25 +35,24 @@ public class GalaxyMain {
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
             
-            Celestial newObject = null;
             switch (choice) {
                 case 1:
-                    newObject = createStar(scanner);
+                    addStar(scanner);
                     break;
                 case 2:
-                    newObject = createPlanet(scanner);
+                    addPlanet(scanner);
                     break;
                 case 3:
-                    newObject = createMoon(scanner);
+                    addMoon(scanner);
                     break;
                 case 4:
-                    newObject = createAsteroid(scanner);
+                    addAsteroid(scanner);
                     break;
                 case 5:
-                    newObject = createComet(scanner);
+                    addComet(scanner);
                     break;
                 case 6:
-                    newObject = createBlackHole(scanner);
+                    addBlackHole(scanner);
                     break;
                 case 7:
                     simulateGalaxy();
@@ -71,11 +66,6 @@ public class GalaxyMain {
                     continue;
                 default:
                     System.out.println("Invalid choice. Try again.");
-            }
-            
-            if (newObject != null) {
-                galaxyObjects.add(newObject);
-                System.out.println(newObject.getName() + " added to the galaxy!\n");
             }
         }
         scanner.close();
@@ -105,98 +95,99 @@ public class GalaxyMain {
         System.out.println();
     }
     
-    private static Star createStar(Scanner scanner) {
+    private static void addStar(Scanner scanner) {
         if (starCount >= MAX_STARS) {
             System.out.println("❌ Maximum number of stars (" + MAX_STARS + ") reached!");
-            return null;
+            return;
         }
         System.out.print("Enter name of the star: ");
         String name = scanner.nextLine().trim();
         if (name.isEmpty()) {
             System.out.println("❌ Star name cannot be empty!");
-            return null;
+            return;
         }
         starCount++;
-        return new Star(name);
+        System.out.println("⭐ " + name + " added to the galaxy!\n");
     }
     
-    private static Planet createPlanet(Scanner scanner) {
+    private static void addPlanet(Scanner scanner) {
         if (planetCount >= MAX_PLANETS) {
             System.out.println("❌ Maximum number of planets (" + MAX_PLANETS + ") reached!");
-            return null;
+            return;
         }
         System.out.print("Enter name of the planet: ");
         String name = scanner.nextLine().trim();
         if (name.isEmpty()) {
             System.out.println("❌ Planet name cannot be empty!");
-            return null;
+            return;
         }
         planetCount++;
-        return new Planet(name);
+        System.out.println("🪐 " + name + " added to the galaxy!\n");
     }
     
-    private static Moon createMoon(Scanner scanner) {
+    private static void addMoon(Scanner scanner) {
         if (moonCount >= MAX_MOONS) {
             System.out.println("❌ Maximum number of moons (" + MAX_MOONS + ") reached!");
-            return null;
+            return;
         }
         System.out.print("Enter name of the moon: ");
         String name = scanner.nextLine().trim();
         if (name.isEmpty()) {
             System.out.println("❌ Moon name cannot be empty!");
-            return null;
+            return;
         }
         moonCount++;
-        return new Moon(name);
+        System.out.println("🌙 " + name + " added to the galaxy!\n");
     }
     
-    private static Asteroid createAsteroid(Scanner scanner) {
+    private static void addAsteroid(Scanner scanner) {
         if (asteroidCount >= MAX_ASTEROIDS) {
             System.out.println("❌ Maximum number of asteroids (" + MAX_ASTEROIDS + ") reached!");
-            return null;
+            return;
         }
         System.out.print("Enter name of the asteroid: ");
         String name = scanner.nextLine().trim();
         if (name.isEmpty()) {
             System.out.println("❌ Asteroid name cannot be empty!");
-            return null;
+            return;
         }
         asteroidCount++;
-        return new Asteroid(name);
+        System.out.println("☄️ " + name + " added to the galaxy!\n");
     }
     
-    private static Comet createComet(Scanner scanner) {
+    private static void addComet(Scanner scanner) {
         if (cometCount >= MAX_COMETS) {
             System.out.println("❌ Maximum number of comets (" + MAX_COMETS + ") reached!");
-            return null;
+            return;
         }
         System.out.print("Enter name of the comet: ");
         String name = scanner.nextLine().trim();
         if (name.isEmpty()) {
             System.out.println("❌ Comet name cannot be empty!");
-            return null;
+            return;
         }
         cometCount++;
-        return new Comet(name);
+        System.out.println("☄️ " + name + " added to the galaxy!\n");
     }
     
-    private static BlackHole createBlackHole(Scanner scanner) {
+    private static void addBlackHole(Scanner scanner) {
         if (blackHoleCount >= MAX_BLACK_HOLES) {
             System.out.println("❌ Maximum number of black holes (" + MAX_BLACK_HOLES + ") reached!");
-            return null;
+            return;
         }
         System.out.print("Enter name of the black hole: ");
         String name = scanner.nextLine().trim();
         if (name.isEmpty()) {
             System.out.println("❌ Black hole name cannot be empty!");
-            return null;
+            return;
         }
         blackHoleCount++;
-        return new BlackHole(name);
+        System.out.println("⚫ " + name + " added to the galaxy!\n");
     }
     
     private static void simulateGalaxy() {
-        if (galaxyObjects.isEmpty()) {
+        int totalObjects = starCount + planetCount + moonCount + asteroidCount + cometCount + blackHoleCount;
+        if (totalObjects == 0) {
             System.out.println("❌ No objects in galaxy yet! Add some celestial objects first.\n");
             return;
         }
@@ -204,17 +195,20 @@ public class GalaxyMain {
         System.out.println("\n🔭 Simulating your galaxy...");
         System.out.println("=".repeat(50));
         
-        for (Celestial obj : galaxyObjects) {
-            obj.updatePosition();  // This assumes you have this method in Celestial
-            System.out.println("📍 " + obj);
-        }
+        // Create the simulation grid with the counts
+        GalaxySimulationGrid model = new GalaxySimulationGrid(starCount, planetCount, moonCount, 
+                                                             asteroidCount, cometCount, blackHoleCount);
+        
+        // Run the simulation
+        model.runSimulation();
         
         System.out.println("=".repeat(50));
         System.out.println("✨ Simulation complete!\n");
     }
     
     private static void launchGalaxyGUI() {
-        if (galaxyObjects.isEmpty()) {
+        int totalObjects = starCount + planetCount + moonCount + asteroidCount + cometCount + blackHoleCount;
+        if (totalObjects == 0) {
             System.out.println("❌ No objects in galaxy yet! Add some celestial objects first.\n");
             return;
         }
@@ -226,8 +220,9 @@ public class GalaxyMain {
         
         System.out.println("🚀 Launching Galaxy GUI...");
         
-        // Instantiate the model with the collected celestial objects
-        GalaxySimulationGrid model = new GalaxySimulationGrid(galaxyObjects);
+        // Create the simulation grid with the counts
+        GalaxySimulationGrid model = new GalaxySimulationGrid(starCount, planetCount, moonCount, 
+                                                             asteroidCount, cometCount, blackHoleCount);
         
         // Launch the GUI and pass it the model
         GalaxyGUI gui = new GalaxyGUI(model);
@@ -237,3 +232,5 @@ public class GalaxyMain {
         System.out.println("You can continue adding objects or exit the program.\n");
     }
 }
+        
+  
