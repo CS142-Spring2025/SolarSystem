@@ -1,4 +1,5 @@
-package GalaxyProject;
+
+ package GalaxyProject;
 
 public class Asteroid extends Celestial {
     private double dx, dy, rotationAngle, rotationSpeed;
@@ -69,11 +70,25 @@ public class Asteroid extends Celestial {
         g2d.translate(-x, -y);
     }
     
+    // Collision detection
+    public boolean collidesWith(Celestial other) {
+        double distance = Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2));
+        return distance < (size + other.getSize()) / 2;
+    }
+    
+    // Handle collision response (bounce off each other)
+    public void handleCollision(Asteroid other) {
+        // Simple elastic collision - swap velocities
+        double tempDx = this.dx;
+        double tempDy = this.dy;
+        this.dx = other.dx;
+        this.dy = other.dy;
+        other.dx = tempDx;
+        other.dy = tempDy;
+    }
+    
     public double getDx() { return dx; }
     public double getDy() { return dy; }
     public void setDx(double dx) { this.dx = dx; }
     public void setDy(double dy) { this.dy = dy; }
 }
-
-    
-    
