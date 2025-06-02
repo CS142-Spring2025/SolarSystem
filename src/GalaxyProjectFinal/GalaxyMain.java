@@ -24,8 +24,9 @@ public class GalaxyMain {
     
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("🌌 Welcome to the Galaxy Simulation 🌌");
-        System.out.println("You can create your own galaxy by choosing celestial objects.");
+        System.out.println("                  ****Welcome to the Galaxy Simulation!****");
+        System.out.println("----------------------------------------------------------------------------------");
+        System.out.println("This is a program where you can create your own galaxy by choosing celestial objects!");
         System.out.println("Note: You need at least " + MIN_STARS + " star(s) to create a galaxy.\n");
         
         boolean running = true;
@@ -64,13 +65,14 @@ public class GalaxyMain {
                     System.out.println("Exiting simulation. Goodbye!");
                     continue;
                 default:
-                    System.out.println("Invalid choice. Try again.");
+                    System.err.println("Invalid choice. Try again.");
             }
         }
         scanner.close();
     }
     
     private static void displayMenu() {
+        System.out.println("--------------------------------------");
         System.out.println("Choose an object to add to your galaxy:");
         System.out.println("1. Star (Max: " + MAX_STARS + ")");
         System.out.println("2. Planet (Max: " + MAX_PLANETS + ")");
@@ -95,7 +97,7 @@ public class GalaxyMain {
     
     private static void addStar(Scanner scanner) {
         if (stars.size() >= MAX_STARS) {
-            System.out.println("❌ Maximum number of stars (" + MAX_STARS + ") reached!");
+            System.err.println("❌ Maximum number of stars (" + MAX_STARS + ") reached!");
             return;
         }
            
@@ -107,11 +109,11 @@ public class GalaxyMain {
     
     private static void addPlanet(Scanner scanner) {
         if (planets.size() >= MAX_PLANETS) {
-            System.out.println("❌ Maximum number of planets (" + MAX_PLANETS + ") reached!");
+            System.err.println("❌ Maximum number of planets (" + MAX_PLANETS + ") reached!");
             return;
         }
         if (stars.isEmpty()) {
-        System.out.println("❌ You need at least one star to orbit!");
+        System.err.println("❌ You need at least one star to orbit!");
         return;
     }      
         
@@ -124,11 +126,11 @@ public class GalaxyMain {
     
     private static void addMoon(Scanner scanner) {
         if (moons.size() >= MAX_MOONS) {
-            System.out.println("❌ Maximum number of moons (" + MAX_MOONS + ") reached!");
+            System.err.println("❌ Maximum number of moons (" + MAX_MOONS + ") reached!");
             return;
         }
         if (planets.isEmpty()) {
-        System.out.println("❌ You need at least one planet to orbit!");
+        System.err.println("❌ You need at least one planet to orbit!");
         return;
     }
                 
@@ -141,7 +143,7 @@ public class GalaxyMain {
     
     private static void addAsteroid(Scanner scanner) {
         if (asteroids.size() >= MAX_ASTEROIDS) {
-            System.out.println("❌ Maximum number of asteroids (" + MAX_ASTEROIDS + ") reached!");
+            System.err.println("❌ Maximum number of asteroids (" + MAX_ASTEROIDS + ") reached!");
             return;
         }
         
@@ -154,7 +156,7 @@ public class GalaxyMain {
     
     private static void addComet(Scanner scanner) {
         if (comets.size() >= MAX_COMETS) {
-            System.out.println("❌ Maximum number of comets (" + MAX_COMETS + ") reached!");
+            System.err.println("❌ Maximum number of comets (" + MAX_COMETS + ") reached!");
             return;
         }
         
@@ -167,7 +169,7 @@ public class GalaxyMain {
     
     private static void addBlackHole(Scanner scanner) {
         if (blackHoles.size() >= MAX_BLACK_HOLES) {
-            System.out.println("❌ Maximum number of black holes (" + MAX_BLACK_HOLES + ") reached!");
+            System.err.println("❌ Maximum number of black holes (" + MAX_BLACK_HOLES + ") reached!");
             return;
         }
 
@@ -189,12 +191,12 @@ public class GalaxyMain {
         int totalObjects = stars.size() + planets.size() + moons.size() + 
                           asteroids.size() + comets.size() + blackHoles.size();
         if (totalObjects == 0) {
-            System.out.println("❌ No objects in galaxy yet! Add some celestial objects first.\n");
+            System.err.println("❌ No objects in galaxy yet! Add some celestial objects first.\n");
             return;
         }
         
         if (stars.size() < MIN_STARS) {
-            System.out.println("❌ You need at least " + MIN_STARS + " star(s) to launch the GUI!\n");
+            System.err.println("❌ You need at least " + MIN_STARS + " star(s) to launch the GUI!\n");
             return;
         }
         
