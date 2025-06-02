@@ -10,27 +10,20 @@ public class Asteroid extends Celestial {
     
     // An Asteroid constructor which calls the super with name and initializes movement properties
     // Generates random size, mass, rotation properties and spawns from screen edges
-    public Asteroid(String name) {
-        super(name);
-        initializeProperties();
+    public Asteroid(double x, double y, double mass, int size) {
+        super(x, y, mass, size);
         initializeFromEdge();
         initializeMovement();
+        this.rotationAngle = random.nextDouble() * 360;
+        this.rotationSpeed = (random.nextDouble() - 0.5) * 4;
     }
     
     // An Asteroid constructor with specified position and velocity
     // Used for creating asteroids at specific locations with defined movement
-    public Asteroid(String name, double x, double y, double dx, double dy) {
-        super(name, x, y);
+    public Asteroid(double x, double y, double mass, int size, double dx, double dy) {
+        super(x, y, mass, size);
         this.dx = dx;
         this.dy = dy;
-        initializeProperties();
-    }
-    
-    // A method which initializes the asteroid's basic properties
-    // Sets random size, mass based on size, and rotation characteristics  
-    private void initializeProperties() {
-        this.size = 8 + random.nextInt(12);
-        this.mass = size * 0.5;
         this.rotationAngle = random.nextDouble() * 360;
         this.rotationSpeed = (random.nextDouble() - 0.5) * 4;
     }
@@ -39,17 +32,17 @@ public class Asteroid extends Celestial {
     // Positions asteroid outside visible area on one of four screen edges
     private void initializeFromEdge() {
         int edge = random.nextInt(4);
-        double[] positions = {random.nextDouble() * 800, -size, 800 + size, random.nextDouble() * 600,
-                             random.nextDouble() * 800, 600 + size, -size, random.nextDouble() * 600};
-        this.x = positions[edge * 2];
-        this.y = positions[edge * 2 + 1];
+        double[] positions = {random.nextDouble() * 800, -getSize(), 800 + getSize(), random.nextDouble() * 600,
+                             random.nextDouble() * 800, 600 + getSize(), -getSize(), random.nextDouble() * 600};
+        setX(positions[edge * 2]);
+        setY(positions[edge * 2 + 1]);
     }
     
     // A method which calculates initial movement direction toward screen center
     // Adds random variation to create natural asteroid movement patterns
     private void initializeMovement() {
-        double directionX = 400 - this.x;
-        double directionY = 300 - this.y;
+        double directionX = 400 - getX();
+        double directionY = 300 - getY();
         double distance = Math.sqrt(directionX * directionX + directionY * directionY);
         double speed = 1.0 + random.nextDouble() * 2.0;
         
@@ -61,8 +54,8 @@ public class Asteroid extends Celestial {
     // Updates position based on velocity and continuously rotates the asteroid
     @Override
     public void update() {
-        x += dx;
-        y += dy;
+        setX(getX() + dx);
+        setY(getY() + dy);
         rotationAngle = (rotationAngle + rotationSpeed + 360) % 360;
     }
     
@@ -71,6 +64,10 @@ public class Asteroid extends Celestial {
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
+        double x = getX();
+        double y = getY();
+        int size = getSize();
+        
         g2d.translate(x, y);
         g2d.rotate(Math.toRadians(rotationAngle));
         
@@ -89,17 +86,11 @@ public class Asteroid extends Celestial {
         g2d.translate(-x, -y);
     }
     
-    // An overridden getType method which returns the String of the type "Asteroid"
-    @Override
-    public String getType() {
-        return "Asteroid";
-    }
-    
     // A method which checks collision with another celestial object
     // Returns true if the distance between objects is less than combined radii
     public boolean collidesWith(Celestial other) {
-        double distance = Math.sqrt(Math.pow(x - other.getX(), 2) + Math.pow(y - other.getY(), 2));
-        return distance < (size + other.getSize()) / 2;
+        double distance = Math.sqrt(Math.pow(getX() - other.getX(), 2) + Math.pow(getY() - other.getY(), 2));
+        return distance < (getSize() + other.getSize()) / 2;
     }
     
     // A method which handles collision response between two asteroids
@@ -114,10 +105,25 @@ public class Asteroid extends Celestial {
     }
     
     // Getter and setter methods for velocity components
-    public double getDx() { return dx; }
-    public double getDy() { return dy; }
-    public void setDx(double dx) { this.dx = dx; }
-    public void setDy(double dy) { this.dy = dy; }
+    public double getDx() { 
+        return dx; 
+    }
+    
+    public double getDy() { 
+        return dy; 
+    }
+    
+    public void setDx(double dx) {
+        this.dx = dx; 
+    }
+    
+    public void setDy(double dy) {
+        this.dy = dy; 
+    }
+    
+    // An overridden getType method which returns the String of the type "Asteroid"
+    @Override
+    public String getType() {
+        return "Asteroid";
+    }
 }
-
-//TEST
