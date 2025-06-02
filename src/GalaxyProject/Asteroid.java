@@ -1,5 +1,4 @@
-
- package GalaxyProject;
+package GalaxyProject;
 
 public class Asteroid extends Celestial {
     private double dx, dy, rotationAngle, rotationSpeed;
