@@ -8,14 +8,13 @@ public class Celestial {
     private double y;
     private double mass;
     private int size;
-    private int destroy;
     
     // A Celestial constructor which initializes the variables x, y, mass, and size
     public Celestial(double x, double y, double mass, int size) {
         this.x = x;
         this.y = y;
         this.mass = mass;
-        this.size = size;
+        this.size = size;;
     }
     
     // A getX method that returns the x coordinate
@@ -38,10 +37,6 @@ public class Celestial {
         return size;
     }
     
-    public void setDestroyed() {
-        this.destroy = destroy;
-    }
-    
     // A setX method that sets the updated x position
     public void setX(double x) {
         this.x = x;
@@ -50,6 +45,16 @@ public class Celestial {
     // A setY method that sets the updated y position
     public void setY(double y) {
         this.y = y;
+    }
+    
+    // A setMass method that sets the mass of the object
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+    
+    // A setSize method that sets the size of the object
+    public void setSize(int size) {
+        this.size = size;
     }
     
     // A update method that returns nothing and will be overriden by subclasses
@@ -64,5 +69,4 @@ public class Celestial {
     public String getType() {
         throw new UnsupportedOperationException("Type not found");
     }
-    
 }
