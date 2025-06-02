@@ -14,7 +14,7 @@ public class Planet extends Orbit{
     // An overriden draw method which draws out a circular red planet 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.RED);
+        g.setColor(Color.BLUE);
         g.fillOval((int)(getX() - getSize() / 2), (int)(getY() - getSize() / 2), getSize(), getSize());
     }
     

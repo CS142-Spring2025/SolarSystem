@@ -1,10 +1,6 @@
 package GalaxyProjectFinal;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.awt.event.ActionListener;
 
 /**
  *
@@ -25,7 +21,7 @@ import java.awt.event.ActionListener;
  * movement is now based on pixel space, not a 2D Grid....
  */
 
-public class GalaxyGUI extends JPanel {
+  public class GalaxyGUI extends JPanel {
    private GalaxySimulation model;
    private Timer timer;
    
@@ -53,15 +49,38 @@ public class GalaxyGUI extends JPanel {
       
       //draw objects from the model
       for (Celestial obj : model.getObjects()) {
-         if (!obj.setDestroyed())     //add safety check in case of collisions
+         if (!obj.isDestroyed()) {   //add safety check in case of collisions
          obj.draw(g2d);  //ask each object to draw itself
+         }
       }
    }
-   public void pause() {
-      timer.stop();
-   }
 
-   public void resume() {
-      timer.start();
-   }  
-}
+
+//    public void togglePause() {
+//        isPaused = !isPaused;
+//    }
+//    
+//
+//    public void speedUp() {
+//        if (animationSpeed > 20) {
+//            animationSpeed -= 20;
+//            timer.setDelay(animationSpeed);
+//        }
+//    }
+//
+//    public void slowDown() {
+//        if (animationSpeed < 500) {
+//            animationSpeed += 20;
+//            timer.setDelay(animationSpeed);
+//        }
+//    }
+//    
+//    public void stopAnimation() {
+//        timer.stop();
+//    }
+//    
+//    // Getters
+//    public boolean isPaused() { return isPaused; }
+//    public int getAnimationSpeed() { return animationSpeed; }
+   }
+   

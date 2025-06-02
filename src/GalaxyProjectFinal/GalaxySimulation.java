@@ -1,5 +1,4 @@
 package GalaxyProjectFinal;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +32,11 @@ import java.util.List;
             // Handle collisions - simple version
         for (int i = 0; i < objects.size(); i++) {
             Celestial a = objects.get(i);
-            if (a.setDestroyed()) continue;
+            if (a.isDestroyed()) continue;
 
-           for (int j = i + 1; j < objects.size(); j++) {
+            for (int j = i + 1; j < objects.size(); j++) {
                 Celestial b = objects.get(j);
-                if (b.setDestroyed()) continue;
+                if (b.isDestroyed()) continue;
 
                 // Check collisions (using existing helper methods)
                 if (a instanceof Asteroid && b instanceof Asteroid) {
@@ -61,7 +60,7 @@ import java.util.List;
         }
 
         // Remove destroyed objects
-        objects.removeIf(Celestial::setDestroyed);
+        objects.removeIf(Celestial::isDestroyed);
     }
 }
 

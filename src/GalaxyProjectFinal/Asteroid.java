@@ -1,57 +1,50 @@
 package GalaxyProjectFinal;
-import java.awt.*;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Color;
 import java.util.Random;
 
-// Uses an Asteroid class which moves across the screen
-// An Asteroid class extends the Celestial class
 public class Asteroid extends Celestial {
     private double dx, dy, rotationAngle, rotationSpeed;
     private static final Random random = new Random();
     
-    // An Asteroid constructor which calls the super with name and initializes movement properties
-    // Generates random size, mass, rotation properties and spawns from screen edges
-    public Asteroid(double x, double y, double mass, int size) {
-        super(x, y, mass, size);
+    public Asteroid(double x, double y) {
+        super(x, y, 20, 10);
+        init();
         initializeFromEdge();
         initializeMovement();
-        this.rotationAngle = random.nextDouble() * 360;
-        this.rotationSpeed = (random.nextDouble() - 0.5) * 4;
     }
     
-    // An Asteroid constructor with specified position and velocity
-    // Used for creating asteroids at specific locations with defined movement
-    public Asteroid(double x, double y, double mass, int size, double dx, double dy) {
-        super(x, y, mass, size);
+    public Asteroid(double x, double y, double dx, double dy) {
+        super(x, y, 20, 10);
         this.dx = dx;
         this.dy = dy;
+        init();
+    }
+    
+    private void init() {
         this.rotationAngle = random.nextDouble() * 360;
         this.rotationSpeed = (random.nextDouble() - 0.5) * 4;
     }
     
-    // A method which spawns the asteroid from a random edge of the screen
-    // Positions asteroid outside visible area on one of four screen edges
     private void initializeFromEdge() {
         int edge = random.nextInt(4);
-        double[] positions = {random.nextDouble() * 800, -getSize(), 800 + getSize(), random.nextDouble() * 600,
-                             random.nextDouble() * 800, 600 + getSize(), -getSize(), random.nextDouble() * 600};
-        setX(positions[edge * 2]);
-        setY(positions[edge * 2 + 1]);
+        double[] pos = {random.nextDouble() * 800, -getSize(), 800 + getSize(), random.nextDouble() * 600,
+                       random.nextDouble() * 800, 600 + getSize(), -getSize(), random.nextDouble() * 600};
+        setX(pos[edge * 2]);
+        setY(pos[edge * 2 + 1]);
     }
     
-    // A method which calculates initial movement direction toward screen center
-    // Adds random variation to create natural asteroid movement patterns
     private void initializeMovement() {
-        double directionX = 400 - getX();
-        double directionY = 300 - getY();
-        double distance = Math.sqrt(directionX * directionX + directionY * directionY);
+        double dirX = 400 - getX(), dirY = 300 - getY();
+        double dist = Math.sqrt(dirX * dirX + dirY * dirY);
         double speed = 1.0 + random.nextDouble() * 2.0;
         
-        this.dx = (directionX / distance) * speed + (random.nextDouble() - 0.5) * 0.5;
-        this.dy = (directionY / distance) * speed + (random.nextDouble() - 0.5) * 0.5;
+        this.dx = (dirX / dist) * speed + (random.nextDouble() - 0.5) * 0.5;
+        this.dy = (dirY / dist) * speed + (random.nextDouble() - 0.5) * 0.5;
     }
     
-    // An overridden update method which moves the asteroid and rotates it
-    // Updates position based on velocity and continuously rotates the asteroid
     @Override
     public void update() {
         setX(getX() + dx);
@@ -59,43 +52,37 @@ public class Asteroid extends Celestial {
         rotationAngle = (rotationAngle + rotationSpeed + 360) % 360;
     }
     
-    // An overridden draw method which draws an irregular brown asteroid shape
-    // Creates a polygon with craters to represent a realistic asteroid appearance
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        double x = getX();
-        double y = getY();
-        int size = getSize();
-        
-        g2d.translate(x, y);
+        g2d.translate(getX(), getY());
         g2d.rotate(Math.toRadians(rotationAngle));
         
-        // Draw main asteroid body
+        // Draw asteroid shape
+        int s = getSize();
         g2d.setColor(new Color(139, 69, 19));
-        int[] xPoints = {-size/2, -size/3, size/3, size/2, size/3, -size/4};
-        int[] yPoints = {-size/3, -size/2, -size/2, 0, size/2, size/2};
+        int[] xPoints = {-s/2, -s/3, s/3, s/2, s/3, -s/4};
+        int[] yPoints = {-s/3, -s/2, -s/2, 0, s/2, s/2};
         g2d.fillPolygon(xPoints, yPoints, 6);
         
-        // Add surface craters for detail
+        // Add craters
         g2d.setColor(new Color(101, 67, 33));
-        g2d.fillOval(-size/4, -size/6, size/3, size/4);
-        g2d.fillOval(size/6, size/8, size/4, size/4);
+        g2d.fillOval(-s/4, -s/6, s/3, s/4);
+        g2d.fillOval(s/6, s/8, s/4, s/4);
         
         g2d.rotate(-Math.toRadians(rotationAngle));
-        g2d.translate(-x, -y);
+        g2d.translate(-getX(), -getY());
     }
     
-    // A method which checks collision with another celestial object
-    // Returns true if the distance between objects is less than combined radii
+    // Collision detection
     public boolean collidesWith(Celestial other) {
         double distance = Math.sqrt(Math.pow(getX() - other.getX(), 2) + Math.pow(getY() - other.getY(), 2));
         return distance < (getSize() + other.getSize()) / 2;
     }
     
-    // A method which handles collision response between two asteroids
-    // Implements simple elastic collision by swapping velocities
+    // Handle collision response (bounce off each other)
     public void handleCollision(Asteroid other) {
+        // Simple elastic collision - swap velocities
         double tempDx = this.dx;
         double tempDy = this.dy;
         this.dx = other.dx;
@@ -104,26 +91,8 @@ public class Asteroid extends Celestial {
         other.dy = tempDy;
     }
     
-    // Getter and setter methods for velocity components
-    public double getDx() { 
-        return dx; 
-    }
-    
-    public double getDy() { 
-        return dy; 
-    }
-    
-    public void setDx(double dx) {
-        this.dx = dx; 
-    }
-    
-    public void setDy(double dy) {
-        this.dy = dy; 
-    }
-    
-    // An overridden getType method which returns the String of the type "Asteroid"
-    @Override
-    public String getType() {
-        return "Asteroid";
-    }
+    public double getDx() { return dx; }
+    public double getDy() { return dy; }
+    public void setDx(double dx) { this.dx = dx; }
+    public void setDy(double dy) { this.dy = dy; }
 }
