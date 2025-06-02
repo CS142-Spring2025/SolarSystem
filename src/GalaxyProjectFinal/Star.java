@@ -13,7 +13,6 @@ public class Star extends Celestial {
     // An overriden update method that returns nothing because in this case the sun (A dwarf star) is not moving
     @Override
     public void update() {
-        return;
     }
     
     // An overriden draw method which draws out a circular yellow sun
