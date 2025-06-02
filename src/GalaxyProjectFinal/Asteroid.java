@@ -119,3 +119,5 @@ public class Asteroid extends Celestial {
     public void setDx(double dx) { this.dx = dx; }
     public void setDy(double dy) { this.dy = dy; }
 }
+
+//TEST
