@@ -43,16 +43,16 @@ public class GalaxyMain {
             
             switch (choice) {
                 case 1:
-                    addStar(scanner);
+                    addStarWithFlow(scanner);
                     break;
                 case 2:
-                    addPlanet(scanner);
+                    addSpaceObjectsMenu(scanner);
                     break;
                 case 3:
-                    addMoon(scanner);
+                    launchGalaxyGUI();
                     break;
                 case 4:
-                    addAsteroid(scanner);
+                    startNewGalaxy(scanner);
                     break;
                 case 5:
                     addComet(scanner);
@@ -68,37 +68,29 @@ public class GalaxyMain {
                     System.out.println("Exiting simulation. Goodbye!");
                     continue;
                 default:
-                    System.err.println("Invalid choice. Try again.");
+                    System.err.println("Invalid choice. Please enter 1-5.");
             }
         }
         scanner.close();
     }
     
     private static void displayMenu() {
-        System.out.println("--------------------------------------");
-        System.out.println("Choose an object to add to your galaxy:");
-        System.out.println("1. Star (Max: " + MAX_STARS + ")");
-        System.out.println("2. Planet (Max: " + MAX_PLANETS + ")");
-        System.out.println("3. Moon (Max: " + MAX_MOONS + ")");
-        System.out.println("4. Asteroid (Max: " + MAX_ASTEROIDS + ")");
-        System.out.println("5. Comet (Max: " + MAX_COMETS + ")");
-        System.out.println("6. Black Hole (Max: " + MAX_BLACK_HOLES + ")");
-        System.out.println("7. Simulate Current Galaxy");
-        System.out.println("8. Exit");
-    }
-    
-    private static void displayCurrentCounts() {
-        System.out.println("\nCurrent Galaxy Contents:");
-        System.out.println("Stars: " + stars.size() + "/" + MAX_STARS + 
-                          " | Planets: " + planets.size() + "/" + MAX_PLANETS + 
-                          " | Moons: " + moons.size() + "/" + MAX_MOONS);
-        System.out.println("Asteroids: " + asteroids.size() + "/" + MAX_ASTEROIDS + 
-                          " | Comets: " + comets.size() + "/" + MAX_COMETS + 
-                          " | Black Holes: " + blackHoles.size() + "/" + MAX_BLACK_HOLES);
+        System.out.println("=== GALAXY BUILDER ===");
+        System.out.println("1. Add Star System  (creates star + planets + moons)");
+        System.out.println("2. Add Space Objects  (asteroids, comets, black holes)");
+        System.out.println("3. Launch Simulation");
+        System.out.println("4. Start Over");
+        System.out.println("5. Exit");
         System.out.println();
     }
     
-    private static void addStar(Scanner scanner) {
+    private static void displayCurrentCounts() {
+        System.out.println("Your Galaxy: " + stars.size() + " stars, " + planets.size() + " planets, " + 
+                          moons.size() + " moons, " + asteroids.size() + " asteroids, " + 
+                          comets.size() + " comets, " + blackHoles.size() + " black holes");
+    }
+    
+    private static void addStarWithFlow(Scanner scanner) {
         if (stars.size() >= MAX_STARS) {
             System.err.println("❌ Maximum number of stars (" + MAX_STARS + ") reached!");
             return;
@@ -106,49 +98,73 @@ public class GalaxyMain {
            
         // Create actual Star object
         double x = 50 + Math.random() * 700;
-        double y = 50 + Math.random() *500;
-        Star star = new Star (x, y);  //for now we will initialize at center of screen
+        double y = 50 + Math.random() * 500;
+        Star star = new Star(x, y);
         stars.add(star);
-        //System.out.println("⭐ " + name + " added to the galaxy!\n");
-    }
-    
-    private static void addPlanet(Scanner scanner) {
-        if (planets.size() >= MAX_PLANETS) {
-            System.err.println("❌ Maximum number of planets (" + MAX_PLANETS + ") reached!");
-            return;
-        }
-        if (stars.isEmpty()) {
-        System.err.println("❌ You need at least one star to orbit!");
-        return;
-    }      
+        System.out.println("* Great! You added a star to the galaxy!");
         
-        // Create actual Planet object - it needs something to orbit around
-        Star centerStar = stars.get(0); //for now, orbit the first star
-        Planet planet = new Planet(centerStar, 100+ Math.random() * 100, 0.02 + Math.random() * 0.03);
-        planets.add(planet);
-       // System.out.println("🪐 " + name + " added to the galaxy!\n");
+        // Ask if they want to add planets
+        if (planets.size() < MAX_PLANETS) {
+            System.out.print("Would you like to add a planet to orbit this star? (yes/no): ");
+            String response = scanner.nextLine().toLowerCase();
+            if (response.equals("y") || response.equals("yes")) {
+                addPlanetsWithFlow(scanner);
+            }
+        } else {
+            System.out.println("(Maximum planets already reached)");
+        }
     }
     
-    private static void addMoon(Scanner scanner) {
-        if (moons.size() >= MAX_MOONS) {
-            System.err.println("❌ Maximum number of moons (" + MAX_MOONS + ") reached!");
-            return;
+    private static void addPlanetsWithFlow(Scanner scanner) {
+        System.out.print("How many planets would you like to add? (Max remaining: " + 
+                        (MAX_PLANETS - planets.size()) + "): ");
+        int numPlanets = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        
+        int maxToAdd = Math.min(numPlanets, MAX_PLANETS - planets.size());
+        
+        for (int i = 0; i < maxToAdd; i++) {
+            // Create actual Planet object - it needs something to orbit around
+            Star centerStar = stars.get(0); // for now, orbit the first star
+            Planet planet = new Planet(centerStar, 100 + Math.random() * 100, 0.02 + Math.random() * 0.03);
+            planets.add(planet);
         }
-        if (planets.isEmpty()) {
-        System.err.println("❌ You need at least one planet to orbit!");
-        return;
+        
+        System.out.println("PLANET: Great! You added " + maxToAdd + " planet(s) to the galaxy!");
+        
+        // Ask if they want to add moons
+        if (moons.size() < MAX_MOONS && !planets.isEmpty()) {
+            System.out.print("Would you like to add moons to orbit your planets? (y/n): ");
+            String response = scanner.nextLine().toLowerCase();
+            if (response.equals("y") || response.equals("yes")) {
+                addMoonsWithFlow(scanner);
+            }
+        } else if (moons.size() >= MAX_MOONS) {
+            System.out.println("(Maximum moons already reached)");
+        }
     }
-                
-        // Create actual Moon object - needs a planet to orvbit around
-        Planet parentPlanet = planets.get(0); //for now, orbit the first planet
-        Moon moon = new Moon(parentPlanet, 30 + Math.random() * 20, 0.05 + Math.random() * 0.03);
-        moons.add(moon);
-        //System.out.println("🌙 " + name + " added to the galaxy!\n");
+    
+    private static void addMoonsWithFlow(Scanner scanner) {
+        System.out.print("How many moons would you like to add? (Max remaining: " + 
+                        (MAX_MOONS - moons.size()) + "): ");
+        int numMoons = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        
+        int maxToAdd = Math.min(numMoons, MAX_MOONS - moons.size());
+        
+        for (int i = 0; i < maxToAdd; i++) {
+            // Create actual Moon object - needs a planet to orbit around
+            Planet parentPlanet = planets.get(i % planets.size()); // Distribute moons among planets
+            Moon moon = new Moon(parentPlanet, 30 + Math.random() * 20, 0.05 + Math.random() * 0.03);
+            moons.add(moon);
+        }
+        
+        System.out.println("MOON: Great! You added " + maxToAdd + " moon(s) to the galaxy!");
     }
     
     private static void addAsteroid(Scanner scanner) {
         if (asteroids.size() >= MAX_ASTEROIDS) {
-            System.err.println("❌ Maximum number of asteroids (" + MAX_ASTEROIDS + ") reached!");
+            System.err.println("X Maximum number of asteroids (" + MAX_ASTEROIDS + ") reached!");
             return;
         }
         
@@ -156,12 +172,12 @@ public class GalaxyMain {
         // Create actual Asteroid object
         Asteroid asteroid = new Asteroid(Math.random() * 800, Math.random() * 600);
         asteroids.add(asteroid);
-        //System.out.println("☄️ " + name + " added to the galaxy!\n");
+        System.out.println("* Asteroid added to the galaxy!");
     }
     
     private static void addComet(Scanner scanner) {
         if (comets.size() >= MAX_COMETS) {
-            System.err.println("❌ Maximum number of comets (" + MAX_COMETS + ") reached!");
+            System.err.println("X Maximum number of comets (" + MAX_COMETS + ") reached!");
             return;
         }
         
@@ -169,7 +185,7 @@ public class GalaxyMain {
         // Create actual Comet object
         Comet comet = new Comet();
         comets.add(comet);
-        //System.out.println("☄️ " + name + " added to the galaxy!\n");
+        System.out.println("* Comet added to the galaxy!");
     }
     
     private static void addBlackHole(Scanner scanner) {
@@ -178,20 +194,69 @@ public class GalaxyMain {
             return;
         }
 
-        // Create actual BlackHole object at a random position (or you can choose a fixed position)
+        // Create actual BlackHole object at a random position
         double x = Math.random() * 800;
         double y = Math.random() * 600;
         BlackHole blackHole = new BlackHole(x, y);
         blackHoles.add(blackHole);
-        // System.out.println("⚫ Black hole added to the galaxy!\n");
+        System.out.println("* Black hole added to the galaxy!");
+    }
+    
+    private static void addSpaceObjectsMenu(Scanner scanner) {
+        System.out.println("\n--- SPACE OBJECTS MENU ---");
+        System.out.println("1. Asteroid (" + asteroids.size() + "/" + MAX_ASTEROIDS + ")");
+        System.out.println("2. Comet (" + comets.size() + "/" + MAX_COMETS + ")");
+        System.out.println("3. Black Hole (" + blackHoles.size() + "/" + MAX_BLACK_HOLES + ")");
+        System.out.println("4. Back to Main Menu");
+        System.out.print("Choose: ");
+        
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        
+        switch (choice) {
+            case 1:
+                addAsteroid(scanner);
+                break;
+            case 2:
+                addComet(scanner);
+                break;
+            case 3:
+                addBlackHole(scanner);
+                break;
+            case 4:
+                return;
+            default:
+                System.err.println("Invalid choice. Please enter 1-4.");
+        }
+    }
+    
+    private static void startNewGalaxy(Scanner scanner) {
+        if (!stars.isEmpty() || !planets.isEmpty() || !moons.isEmpty() || 
+            !asteroids.isEmpty() || !comets.isEmpty() || !blackHoles.isEmpty()) {
+            
+            System.out.print("Are you sure you want to start over? This will clear your current galaxy (y/n): ");
+            String response = scanner.nextLine().toLowerCase();
+            
+            if (response.equals("y") || response.equals("yes")) {
+                clearGalaxy();
+                System.out.println("GALAXY: Starting fresh! Your galaxy has been cleared.");
+            } else {
+                System.out.println("Cancelled. Your current galaxy is preserved.");
+            }
+        } else {
+            System.out.println("Your galaxy is already empty. Start adding celestial objects!");
+        }
+    }
+    
+    private static void clearGalaxy() {
+        stars.clear();
+        planets.clear();
+        moons.clear();
+        asteroids.clear();
+        comets.clear();
+        blackHoles.clear();
     }
                   
-        // Create the simulation 
-        GalaxySimulation model = new GalaxySimulation();
-        
-      
-        
-       
     private static void launchGalaxyGUI() {
         int totalObjects = stars.size() + planets.size() + moons.size() + 
                           asteroids.size() + comets.size() + blackHoles.size();
@@ -205,7 +270,7 @@ public class GalaxyMain {
             return;
         }
         
-        System.out.println("🚀 Launching Galaxy GUI...");
+        System.out.println("ROCKET: Launching Galaxy GUI...");
         
         // Create the simulation grid
         GalaxySimulation model = new GalaxySimulation();
@@ -278,10 +343,18 @@ public class GalaxyMain {
         frame.pack();
         frame.setVisible(true);
 
-        System.out.println("✨ Galaxy GUI launched successfully!");
+        System.out.println("SPARKLES: Galaxy GUI launched successfully!");
         System.out.println("You can continue adding objects or exit the program.\n");
     }
-}          
+}
+                 
+    
        
-            
+   
+    
+  
+           
+     
+        
+      
     
