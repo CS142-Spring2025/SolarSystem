@@ -1,5 +1,8 @@
 package GalaxyProjectFinal;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
 import java.util.*;
 
 public class GalaxyMain {
@@ -227,13 +230,54 @@ public class GalaxyMain {
             model.addObject(blackHole);
         }
         
+        //create the GalaxyGUI panel with the model (for control buttons)
+        GalaxyGUI galaxyPanel = new GalaxyGUI(model);
+
         // Launch the GUI and pass it the model
         JFrame frame = new JFrame("Galaxy Simulation");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new GalaxyGUI(model));
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //frame.add(new GalaxyGUI(model));
+        
+        
+        // Create control buttons
+        JPanel controls = new JPanel();
+        JButton pauseButton = new JButton("Pause/Resume");
+        JButton speedUpButton = new JButton("Speed Up");
+        JButton slowDownButton = new JButton("Slow Down");
+        JButton returnButton = new JButton("Return to Main");
+
+        controls.add(pauseButton);
+        controls.add(speedUpButton);
+        controls.add(slowDownButton);
+        controls.add(returnButton);
+
+        // Layout: add simulation panel + controls
+        frame.setLayout(new BorderLayout());
+        frame.add(galaxyPanel, BorderLayout.CENTER);
+        frame.add(controls, BorderLayout.SOUTH);
+
+        // Add button actions
+        pauseButton.addActionListener(e -> galaxyPanel.togglePause());
+        speedUpButton.addActionListener(e -> galaxyPanel.speedUp());
+        slowDownButton.addActionListener(e -> galaxyPanel.slowDown());
+        returnButton.addActionListener(e -> {
+            frame.dispose();
+            System.out.println("\nReturning to main program...");
+            // Optionally trigger something in GalaxyMain here
+        });
+
+        // Handle "X" close action
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                System.out.println("\nGalaxy GUI closed. Returning to main program...");
+                // You can call back into GalaxyMain here if needed
+            }
+        });
+
         frame.pack();
         frame.setVisible(true);
-        
+
         System.out.println("✨ Galaxy GUI launched successfully!");
         System.out.println("You can continue adding objects or exit the program.\n");
     }

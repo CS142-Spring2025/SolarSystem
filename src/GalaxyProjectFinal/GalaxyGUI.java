@@ -24,6 +24,8 @@ import java.awt.*;
   public class GalaxyGUI extends JPanel {
    private GalaxySimulation model;
    private Timer timer;
+   private boolean isPaused = false;
+   private int animationSpeed = 100; // initial delay
    
     
     //constructor
@@ -56,24 +58,28 @@ import java.awt.*;
    }
 
 
-//    public void togglePause() {
-//        isPaused = !isPaused;
-//    }
-//    
-//
-//    public void speedUp() {
-//        if (animationSpeed > 20) {
-//            animationSpeed -= 20;
-//            timer.setDelay(animationSpeed);
-//        }
-//    }
-//
-//    public void slowDown() {
-//        if (animationSpeed < 500) {
-//            animationSpeed += 20;
-//            timer.setDelay(animationSpeed);
-//        }
-//    }
+   public void togglePause() {
+      if (isPaused) {
+         timer.start();
+      } else {
+         timer.stop();
+      }
+      isPaused = !isPaused;
+   }
+   
+   public void speedUp() {
+      if (animationSpeed > 20) {
+         animationSpeed -= 20;
+         timer.setDelay(animationSpeed);
+      }
+   }
+
+   public void slowDown() {
+      if (animationSpeed < 500) {
+         animationSpeed += 20;
+         timer.setDelay(animationSpeed);
+      }
+   }
 //    
 //    public void stopAnimation() {
 //        timer.stop();
