@@ -102,7 +102,9 @@ public class GalaxyMain {
         }
            
         // Create actual Star object
-        Star star = new Star (400, 300);  //for now we will initialize at center of screen
+        double x = 50 + Math.random() * 700;
+        double y = 50 + Math.random() *500;
+        Star star = new Star (x, y);  //for now we will initialize at center of screen
         stars.add(star);
         //System.out.println("⭐ " + name + " added to the galaxy!\n");
     }
@@ -236,7 +238,6 @@ public class GalaxyMain {
         System.out.println("You can continue adding objects or exit the program.\n");
     }
 }          
-
        
             
     
