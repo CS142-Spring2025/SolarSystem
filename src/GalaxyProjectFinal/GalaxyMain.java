@@ -105,7 +105,7 @@ public class GalaxyMain {
         
         // Ask if they want to add planets
         if (planets.size() < MAX_PLANETS) {
-            System.out.print("Would you like to add a planet to orbit this star? (y/n): ");
+            System.out.print("Would you like to add a planet to orbit this star? (yes/no): ");
             String response = scanner.nextLine().toLowerCase();
             if (response.equals("y") || response.equals("yes")) {
                 addPlanetsWithFlow(scanner);
