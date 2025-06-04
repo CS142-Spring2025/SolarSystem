@@ -24,58 +24,103 @@ import java.util.List;
         return objects;
     }
 
-    public void update() {   //loops through all objects and calls their update().
-            
-        for (Celestial obj : objects) {
-            obj.update();
-         
-        }
-            //check collisions and black hole pull
-        for (int i = 0; i < objects.size(); i++) {
-            Celestial a = objects.get(i);
-            if (a.isDestroyed()) continue;
-
-            for (int j = i + 1; j < objects.size(); j++) {
-                Celestial b = objects.get(j);
-                if (b.isDestroyed()) continue;
-
-                // Check collisions (using existing helper methods)
-                //asteroid-asteroid collision
-                if (a instanceof Asteroid && b instanceof Asteroid) {
-                    Asteroid aAst = (Asteroid) a;
-                    Asteroid bAst = (Asteroid) b;
-                    if (aAst.collidesWith(bAst)) {
-                        aAst.handleCollision(bAst);
-                    }
-                } else if (a instanceof Comet && b instanceof Comet) {
-                    Comet aCom = (Comet) a;
-                    Comet bCom = (Comet) b;
-                    if (aCom.collidesWith(bCom)) {
-                        aCom.handleCollision(bCom);
-                    }
-                } else if ((a instanceof Comet && b instanceof Asteroid) || (a instanceof Asteroid && b instanceof Comet)) {
-                    Comet c = (a instanceof Comet) ? (Comet) a : (Comet) b;
-                    Asteroid m = (a instanceof Asteroid) ? (Asteroid) a : (Asteroid) b;
-                    if (c.collidesWith(m)) {
-                        c.handleCollision(m);
-                    }
-                }
-               
-                
-                ////black hole gravitational pull
-                
-                if (a instanceof BlackHole) {
-                    ((BlackHole) a).applyGravitationalPull(b);
-                }
-                if (b instanceof BlackHole) {
-                    ((BlackHole) b).applyGravitationalPull(a);
-                }
-            }    
-        }      
-               
-        // Remove destroyed objects
-        objects.removeIf(Celestial::isDestroyed);
+    public void update() {
+    // 1) Move every object
+    for (Celestial obj : objects) {
+        obj.update();
     }
+
+    // 2) Check all pairs for collisions, then do black-hole pull
+    for (int i = 0; i < objects.size(); i++) {
+        Celestial a = objects.get(i);
+        if (a.isDestroyed()) continue;
+
+        for (int j = i + 1; j < objects.size(); j++) {
+            Celestial b = objects.get(j);
+            if (b.isDestroyed()) continue;
+
+            // --- COMET hits anything: both destroyed ---
+            if (a instanceof Comet) {
+                Comet comA = (Comet) a;
+                if (comA.collidesWith(b)) {
+                    System.out.println(">>> Comet-Collision: destroying both "
+                        + comA.getClass().getSimpleName() 
+                        + " and " + b.getClass().getSimpleName());
+                    comA.setDestroyed(true);
+                    b.setDestroyed(true);
+                    continue;
+                }
+            }
+            if (b instanceof Comet) {
+                Comet comB = (Comet) b;
+                if (comB.collidesWith(a)) {
+                    System.out.println(">>> Comet-Collision: destroying both "
+                        + a.getClass().getSimpleName() 
+                        + " and " + comB.getClass().getSimpleName());
+                    a.setDestroyed(true);
+                    comB.setDestroyed(true);
+                    continue;
+                }
+            }
+
+            // --- ASTEROID vs. ASTEROID: destroy both if they overlap ---
+            if (a instanceof Asteroid && b instanceof Asteroid) {
+                Asteroid astA = (Asteroid) a;
+                Asteroid astB = (Asteroid) b;
+                if (astA.collidesWith(astB)) {
+                    System.out.println(">>> Asteroid-Asteroid collision: destroying both.");
+                    astA.setDestroyed(true);
+                    astB.setDestroyed(true);
+                    continue;
+                }
+            }
+
+            // --- ASTEROID vs. PLANET or PLANET vs. ASTEROID ---
+            if (a instanceof Asteroid && b instanceof Planet) {
+                Asteroid ast = (Asteroid) a;
+                Planet  pl  = (Planet)  b;
+                if (ast.collidesWith(pl)) {
+                    System.out.print(">>> Asteroid-Planet collision: destroying Asteroid. ");
+                    ast.setDestroyed(true);
+
+                    // Asteroid hit Planet → 50/50 on planet
+                    if (Math.random() < 0.5) {
+                        pl.setDestroyed(true);
+                        System.out.println("Planet was destroyed too.");
+                    } else {
+                        System.out.println("Planet survived.");
+                    }
+                    continue;
+                }
+            }
+            if (a instanceof Planet && b instanceof Asteroid) {
+                Planet  pl  = (Planet)  a;
+                Asteroid ast = (Asteroid) b;
+                if (ast.collidesWith(pl)) {
+                    // Planet hit Asteroid → destroy Asteroid, planet survives
+                    System.out.println(">>> Planet-Asteroid collision: destroying Asteroid; Planet survives.");
+                    ast.setDestroyed(true);
+                    continue;
+                }
+            }
+
+            // (Planet-Planet collisions skipped per rules)
+
+            // --- BLACK HOLE gravitational pull ---
+            if (a instanceof BlackHole) {
+                ((BlackHole) a).applyGravitationalPull(b);
+            }
+            if (b instanceof BlackHole) {
+                ((BlackHole) b).applyGravitationalPull(a);
+            }
+        }
+    }
+
+    // 3) Remove destroyed objects
+    objects.removeIf(Celestial::isDestroyed);
+}
+               
+        
 }
 
 
