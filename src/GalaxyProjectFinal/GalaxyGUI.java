@@ -42,7 +42,13 @@ import java.awt.*;
       });
       timer.start();
    }
-          
+
+   // Expose the current delay, so external code can show it:
+    public int getAnimationSpeed() {
+        return animationSpeed;
+    }
+            
+
     @Override
     protected void paintComponent(Graphics g) {
       super.paintComponent(g);

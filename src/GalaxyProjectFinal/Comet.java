@@ -118,9 +118,15 @@ public boolean collidesWith(Celestial other) {
     }
     else if (other instanceof Planet) {
         otherRadius = ((Planet) other).getSize() / 2.0;
+
+    } else if (other instanceof Moon) {
+        otherRadius = ((Moon) other).getSize() / 2.0;
+
+    } else if (other instanceof Star) {
+        otherRadius = ((Star) other).getSize() / 2.0;
     }
     else {
-        // We don’t handle collisions with Stars or Moons (for now).
+        // We don’t handle collisions with Moons (for now).
         return false;
     }
 

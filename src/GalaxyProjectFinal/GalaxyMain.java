@@ -1,6 +1,7 @@
 package GalaxyProjectFinal;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.util.*;
@@ -303,6 +304,8 @@ public class GalaxyMain {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         //frame.add(new GalaxyGUI(model));
         
+        JLabel speedLabel = new JLabel("Click Speed Up/Slow Down multiple times.  Delay: " 
+        + galaxyPanel.getAnimationSpeed() + " ms");
         
         // Create control buttons
         JPanel controls = new JPanel();
@@ -311,6 +314,7 @@ public class GalaxyMain {
         JButton slowDownButton = new JButton("Slow Down");
         JButton returnButton = new JButton("Return to Main");
 
+        controls.add(speedLabel);
         controls.add(pauseButton);
         controls.add(speedUpButton);
         controls.add(slowDownButton);
