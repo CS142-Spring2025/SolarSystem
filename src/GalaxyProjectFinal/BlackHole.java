@@ -26,48 +26,59 @@ public class BlackHole extends Celestial {
     setMass(newMass);
 
     this.pullStrength = newMass * 0.1;
-    this.eventHorizonRadius = newSize * 0.6;
+    this.eventHorizonRadius = newSize * 2;
     this.influenceRadius = newSize * 8;
     this.rotationAngle = 0;
 }
 
  
-    @Override
-    public void update() {
-        rotationAngle = (rotationAngle + 2.0) % 360;
-    }
+    
     
     public void applyGravitationalPull(Celestial other) {
-        if (other == this || other.isDestroyed()) return;
-        
-        double dx = getX() - other.getX();
-        double dy = getY() - other.getY();
-        double distance = Math.sqrt(dx * dx + dy * dy);
+    // Ignore ourselves and anything already marked destroyed
+    if (other == this || other.isDestroyed()) return;
 
-        if (distance <= eventHorizonRadius) {
-            other.setDestroyed(true);
-            return;
-        }
-
-        if (distance <= influenceRadius && distance > 0) {
-            double pullForce = pullStrength / (distance * distance);
-            double dirX = dx / distance;
-            double dirY = dy / distance;
-
-            if (other instanceof Asteroid) {
-                Asteroid a = (Asteroid) other;
-                a.setDx(a.getDx() + dirX * pullForce);
-                a.setDy(a.getDy() + dirY * pullForce);
-            } else if (other instanceof Comet) {
-                Comet c = (Comet) other;
-                c.setDx(c.getDx() + dirX * pullForce);
-                c.setDy(c.getDy() + dirY * pullForce);
-            }
-        }
-    }
+    // Compute vector from "other" to this black hole
+    double dx = getX() - other.getX();
+    double dy = getY() - other.getY();
+    double distance = Math.hypot(dx, dy);
 
     
+    // If inside the event horizon, destroy immediately (changed event horizon to be entire black hole radius)
+    if (distance <= eventHorizonRadius) {
+        other.setDestroyed(true);
+        return;
+    }
 
+    // 3) If inside the influence radius, apply a pull (or at least log it)
+    if (distance <= influenceRadius && distance > 0) {
+        // compute pull magnitude and direction
+        double pullForce = pullStrength / (distance * distance);
+        double dirX = dx / distance;
+        double dirY = dy / distance;
+
+        // --- If the object has dx/dy fields (Asteroid or Comet), update them ---
+        if (other instanceof Asteroid) {
+            Asteroid a = (Asteroid) other;
+            a.setDx(a.getDx() + dirX * pullForce);
+            a.setDy(a.getDy() + dirY * pullForce);
+        } else if (other instanceof Comet) {
+            Comet c = (Comet) other;
+            c.setDx(c.getDx() + dirX * pullForce);
+            c.setDy(c.getDy() + dirY * pullForce);
+            
+        }
+    
+        
+    }
+}
+
+    @Override
+        public void update() {
+            rotationAngle = (rotationAngle + 2.0) % 360;
+                    }
+    
+    @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.translate(getX(), getY());
@@ -94,4 +105,3 @@ public class BlackHole extends Celestial {
     }
     
 }
-
