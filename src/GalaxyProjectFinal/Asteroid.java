@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.util.Random;
+import java.math.*;
 
 public class Asteroid extends Celestial {
     private double dx, dy, rotationAngle, rotationSpeed;
@@ -74,21 +75,55 @@ public class Asteroid extends Celestial {
         g2d.translate(-getX(), -getY());
     }
     
-    // Collision detection
+    /** 
+     * Returns true if “this” asteroid overlaps the other Celestial. 
+     * We treat “radius” = getSize()/2 for every object (Asteroid, Comet, Planet).
+     */
     public boolean collidesWith(Celestial other) {
-        double distance = Math.sqrt(Math.pow(getX() - other.getX(), 2) + Math.pow(getY() - other.getY(), 2));
-        return distance < (getSize() + other.getSize()) / 2;
+        double dx = other.getX() - this.getX();
+        double dy = other.getY() - this.getY();
+        double dist = Math.hypot(dx, dy);
+
+        double myRadius = this.getSize() / 2.0;
+        double otherRadius;
+
+        if (other instanceof Asteroid) {
+            otherRadius = ((Asteroid) other).getSize() / 2.0;
+        }
+        else if (other instanceof Comet) {
+            otherRadius = ((Comet) other).getSize() / 2.0;
+        }
+        else if (other instanceof Planet) {
+            otherRadius = ((Planet) other).getSize() / 2.0;
+
+        } else if (other instanceof Moon) {
+            otherRadius = ((Moon) other).getSize() / 2.0;
+
+        } else if (other instanceof Star) {
+            otherRadius = ((Star) other).getSize() / 2.0;
     }
+    else {
+        return false;
+        }
+
+        return dist < (myRadius + otherRadius);
+    }
+    
     
     // Handle collision response (bounce off each other)
     public void handleCollision(Asteroid other) {
-        // Simple elastic collision - swap velocities
-        double tempDx = this.dx;
-        double tempDy = this.dy;
-        this.dx = other.dx;
-        this.dy = other.dy;
-        other.dx = tempDx;
-        other.dy = tempDy;
+        // Mark both as destroyed so GalaxySimulation’s removeIf(...) kicks in
+        this.setDestroyed(true);
+        other.setDestroyed(true);
+
+        System.out.println(
+        "Asteroid at (" + String.format("%.1f", getX()) 
+      + "," + String.format("%.1f", getY()) 
+      + ") collided with Asteroid at (" 
+      + String.format("%.1f", other.getX()) + "," 
+      + String.format("%.1f", other.getY()) 
+      + ") → both were destroyed"
+        );
     }
     
     public double getDx() { return dx; }

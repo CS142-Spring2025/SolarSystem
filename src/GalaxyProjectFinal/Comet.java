@@ -8,6 +8,10 @@ import java.util.Random;
 public class Comet extends Celestial {
     private double dx, dy, tailLength;
     private static final Random random = new Random();
+    public double getDx() { return dx; }
+    public double getDy() { return dy; }
+    public void setDx(double dx) { this.dx = dx; }
+    public void setDy(double dy) { this.dy = dy; }
     
     public Comet() {
         super(0, 0, 0, 0); //we'll initialize size and mass below
@@ -94,38 +98,56 @@ public class Comet extends Celestial {
         g2d.fillOval((int)(x - size/4), (int)(y - size/4), size/2, size/2);
     }
     
-    // Collision detection
-    public boolean collidesWith(Celestial other) {
-        double distance = Math.sqrt(Math.pow(getX() - other.getX(), 2) + Math.pow(getY() - other.getY(), 2));
-        return distance < (getSize() + other.getSize()) / 2;
+    /**
+ * Returns true if “this” comet overlaps the other Celestial.
+ * We treat “radius” = getSize()/2 for every object (Asteroid, Comet, Planet).
+ */
+public boolean collidesWith(Celestial other) {
+    double dx = other.getX() - this.getX();
+    double dy = other.getY() - this.getY();
+    double dist = Math.hypot(dx, dy);
+
+    double myRadius = this.getSize() / 2.0;
+    double otherRadius;
+
+    if (other instanceof Asteroid) {
+        otherRadius = ((Asteroid) other).getSize() / 2.0;
     }
-    
-    // Handle collision response (bounce off each other)
-    public void handleCollision(Comet other) {
-        // Simple elastic collision - swap velocities
-        double tempDx = this.dx;
-        double tempDy = this.dy;
-        this.dx = other.dx;
-        this.dy = other.dy;
-        other.dx = tempDx;
-        other.dy = tempDy;
+    else if (other instanceof Comet) {
+        otherRadius = ((Comet) other).getSize() / 2.0;
     }
-    
-    // Handle collision with asteroid (different masses)
-    public void handleCollision(Asteroid asteroid) {
-        // Conservation of momentum (simplified)
-       double totalMass = getMass() + asteroid.getMass();
-        double newDx = (getMass() * this.dx + asteroid.getMass() * asteroid.getDx()) / totalMass;
-        double newDy = (getMass() * this.dy + asteroid.getMass() * asteroid.getDy()) / totalMass;
-        
-        this.dx = newDx;
-        this.dy = newDy;
-        asteroid.setDx(newDx);
-        asteroid.setDy(newDy);
+    else if (other instanceof Planet) {
+        otherRadius = ((Planet) other).getSize() / 2.0;
+
+    } else if (other instanceof Moon) {
+        otherRadius = ((Moon) other).getSize() / 2.0;
+
+    } else if (other instanceof Star) {
+        otherRadius = ((Star) other).getSize() / 2.0;
     }
-    
-    public double getDx() { return dx; }
-    public double getDy() { return dy; }
-    public void setDx(double dx) { this.dx = dx; }
-    public void setDy(double dy) { this.dy = dy; }
+    else {
+        // We don’t handle collisions with Moons (for now).
+        return false;
+    }
+
+   return dist < (myRadius + otherRadius);
 }
+
+/** 
+ * When two comets collide, destroy both.  Or if a comet hits an asteroid, destroy both.
+ */
+    public void handleCollision(Celestial other) {
+        if (other instanceof Comet) {
+            this.setDestroyed(true);
+            other.setDestroyed(true);
+        }
+        else if (other instanceof Asteroid) {
+            this.setDestroyed(true);
+            other.setDestroyed(true);
+            System.out.println(">>> Comet–Asteroid collision: " + this + " & " + other);
+        }
+    }
+}
+    
+  
+    
