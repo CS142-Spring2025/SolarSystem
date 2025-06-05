@@ -58,7 +58,7 @@ public class GalaxyMain {
                     addComet(scanner);
                     break;
                 case 6:
-                    addBlackHole(scanner);
+                    addBlackHolesWithFlow(scanner);
                     break;
                 case 7:
                     launchGalaxyGUI();
@@ -74,6 +74,11 @@ public class GalaxyMain {
         scanner.close();
     }
     
+    private static void addComet(Scanner scanner) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addComet'");
+    }
+
     private static void displayMenu() {
         System.out.println("=== GALAXY BUILDER ===");
         System.out.println("1. Add Star System  (creates star + planets + moons)");
@@ -134,7 +139,7 @@ public class GalaxyMain {
         
         // Ask if they want to add moons
         if (moons.size() < MAX_MOONS && !planets.isEmpty()) {
-            System.out.print("Would you like to add moons to orbit your planets? (y/n): ");
+            System.out.print("Would you like to add moons to orbit your planets? (yes/no): ");
             String response = scanner.nextLine().toLowerCase();
             if (response.equals("y") || response.equals("yes")) {
                 addMoonsWithFlow(scanner);
@@ -162,51 +167,79 @@ public class GalaxyMain {
         System.out.println("MOON: Great! You added " + maxToAdd + " moon(s) to the galaxy!");
     }
     
-    private static void addAsteroid(Scanner scanner) {
+    private static void addAsteroidsWithFlow(Scanner scanner) {
         if (asteroids.size() >= MAX_ASTEROIDS) {
-            System.err.println("X Maximum number of asteroids (" + MAX_ASTEROIDS + ") reached!");
+            System.err.println("❌ Maximum number of asteroids (" + MAX_ASTEROIDS + ") reached!");
             return;
         }
         
+        System.out.print("How many asteroids would you like to add? (Max remaining: " + 
+                        (MAX_ASTEROIDS - asteroids.size()) + "): ");
+        int numAsteroids = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
         
-        // Create actual Asteroid object
-        Asteroid asteroid = new Asteroid(Math.random() * 800, Math.random() * 600);
-        asteroids.add(asteroid);
-        System.out.println("* Asteroid added to the galaxy!");
+        int maxToAdd = Math.min(numAsteroids, MAX_ASTEROIDS - asteroids.size());
+        
+        for (int i = 0; i < maxToAdd; i++) {
+            // Create actual Asteroid object
+            Asteroid asteroid = new Asteroid(Math.random() * 800, Math.random() * 600);
+            asteroids.add(asteroid);
+        }
+        
+        System.out.println("ASTEROID: Great! You added " + maxToAdd + " asteroid(s) to the galaxy!");
     }
     
-    private static void addComet(Scanner scanner) {
+    private static void addCometsWithFlow(Scanner scanner) {
         if (comets.size() >= MAX_COMETS) {
-            System.err.println("X Maximum number of comets (" + MAX_COMETS + ") reached!");
+            System.err.println("❌ Maximum number of comets (" + MAX_COMETS + ") reached!");
             return;
         }
         
+        System.out.print("How many comets would you like to add? (Max remaining: " + 
+                        (MAX_COMETS - comets.size()) + "): ");
+        int numComets = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
         
-        // Create actual Comet object
-        Comet comet = new Comet();
-        comets.add(comet);
-        System.out.println("* Comet added to the galaxy!");
+        int maxToAdd = Math.min(numComets, MAX_COMETS - comets.size());
+        
+        for (int i = 0; i < maxToAdd; i++) {
+            // Create actual Comet object
+            Comet comet = new Comet();
+            comets.add(comet);
+        }
+        
+        System.out.println("COMET: Great! You added " + maxToAdd + " comet(s) to the galaxy!");
     }
     
-    private static void addBlackHole(Scanner scanner) {
+    private static void addBlackHolesWithFlow(Scanner scanner) {
         if (blackHoles.size() >= MAX_BLACK_HOLES) {
             System.err.println("❌ Maximum number of black holes (" + MAX_BLACK_HOLES + ") reached!");
             return;
         }
-
-        // Create actual BlackHole object at a random position
-        double x = Math.random() * 800;
-        double y = Math.random() * 600;
-        BlackHole blackHole = new BlackHole(x, y);
-        blackHoles.add(blackHole);
-        System.out.println("* Black hole added to the galaxy!");
+        
+        System.out.print("How many black holes would you like to add? (Max remaining: " + 
+                        (MAX_BLACK_HOLES - blackHoles.size()) + "): ");
+        int numBlackHoles = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        
+        int maxToAdd = Math.min(numBlackHoles, MAX_BLACK_HOLES - blackHoles.size());
+        
+        for (int i = 0; i < maxToAdd; i++) {
+            // Create actual BlackHole object at a random position
+            double x = Math.random() * 800;
+            double y = Math.random() * 600;
+            BlackHole blackHole = new BlackHole(x, y);
+            blackHoles.add(blackHole);
+        }
+        
+        System.out.println("BLACK HOLE: Great! You added " + maxToAdd + " black hole(s) to the galaxy!");
     }
     
     private static void addSpaceObjectsMenu(Scanner scanner) {
         System.out.println("\n--- SPACE OBJECTS MENU ---");
-        System.out.println("1. Asteroid (" + asteroids.size() + "/" + MAX_ASTEROIDS + ")");
-        System.out.println("2. Comet (" + comets.size() + "/" + MAX_COMETS + ")");
-        System.out.println("3. Black Hole (" + blackHoles.size() + "/" + MAX_BLACK_HOLES + ")");
+        System.out.println("1. Asteroids (" + asteroids.size() + "/" + MAX_ASTEROIDS + ")");
+        System.out.println("2. Comets (" + comets.size() + "/" + MAX_COMETS + ")");
+        System.out.println("3. Black Holes (" + blackHoles.size() + "/" + MAX_BLACK_HOLES + ")");
         System.out.println("4. Back to Main Menu");
         System.out.print("Choose: ");
         
@@ -215,13 +248,13 @@ public class GalaxyMain {
         
         switch (choice) {
             case 1:
-                addAsteroid(scanner);
+                addAsteroidsWithFlow(scanner);
                 break;
             case 2:
-                addComet(scanner);
+                addCometsWithFlow(scanner);
                 break;
             case 3:
-                addBlackHole(scanner);
+                addBlackHolesWithFlow(scanner);
                 break;
             case 4:
                 return;
@@ -347,7 +380,12 @@ public class GalaxyMain {
         System.out.println("You can continue adding objects or exit the program.\n");
     }
 }
-                 
+        
+                  
+    
+   
+        
+        
     
        
    
