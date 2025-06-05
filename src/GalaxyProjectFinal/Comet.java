@@ -148,6 +148,3 @@ public boolean collidesWith(Celestial other) {
         }
     }
 }
-    
-  
-    

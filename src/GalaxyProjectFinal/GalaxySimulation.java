@@ -192,9 +192,5 @@ import java.util.List;
 
     // 3) Remove destroyed objects
     objects.removeIf(Celestial::isDestroyed);
+    }                 
 }
-               
-        
-}
-
-

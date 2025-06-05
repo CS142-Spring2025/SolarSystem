@@ -127,7 +127,7 @@ public class GalaxyMain {
         for (int i = 0; i < maxToAdd; i++) {
             // Create actual Planet object - it needs something to orbit around
             Star centerStar = stars.get(0); // for now, orbit the first star
-            Planet planet = new Planet(centerStar, 100 + Math.random() * 100, 0.02 + Math.random() * 0.03);
+            Planet planet = new Planet(centerStar, 45 + Math.random() * 45, 0.02 + Math.random() * 0.03);
             planets.add(planet);
         }
         
@@ -351,14 +351,3 @@ public class GalaxyMain {
         System.out.println("You can continue adding objects or exit the program.\n");
     }
 }
-                 
-    
-       
-   
-    
-  
-           
-     
-        
-      
-    
