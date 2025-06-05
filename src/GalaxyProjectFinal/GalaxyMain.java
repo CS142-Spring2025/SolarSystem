@@ -29,9 +29,10 @@ public class GalaxyMain {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("                  ****Welcome to the Galaxy Simulation!****");
-        System.out.println("----------------------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------------------");
         System.out.println("This is a program where you can create your own galaxy by choosing celestial objects!");
         System.out.println("Note: You need at least " + MIN_STARS + " star(s) to create a galaxy.\n");
+        System.out.println("-------------------------------------------------------------------------------------");
         
         boolean running = true;
         while (running) {
@@ -76,7 +77,7 @@ public class GalaxyMain {
     }
     
     private static void displayMenu() {
-        System.out.println("=== GALAXY BUILDER ===");
+        System.out.println("\n=== GALAXY BUILDER ===");
         System.out.println("1. Add Star System  (creates star + planets + moons)");
         System.out.println("2. Add Space Objects  (asteroids, comets, black holes)");
         System.out.println("3. Launch Simulation");
@@ -102,7 +103,7 @@ public class GalaxyMain {
         double y = 50 + Math.random() * 500;
         Star star = new Star(x, y);
         stars.add(star);
-        System.out.println("* Great! You added a star to the galaxy!");
+        System.out.println("\nSTAR: Great! You added a star to the galaxy!");
         
         // Ask if they want to add planets
         if (planets.size() < MAX_PLANETS) {
@@ -112,7 +113,7 @@ public class GalaxyMain {
                 addPlanetsWithFlow(scanner);
             }
         } else {
-            System.out.println("(Maximum planets already reached)");
+            System.err.println("(Maximum planets already reached)");
         }
     }
     
@@ -127,7 +128,7 @@ public class GalaxyMain {
         for (int i = 0; i < maxToAdd; i++) {
             // Create actual Planet object - it needs something to orbit around
             Star centerStar = stars.get(0); // for now, orbit the first star
-            Planet planet = new Planet(centerStar, 100 + Math.random() * 100, 0.02 + Math.random() * 0.03);
+            Planet planet = new Planet(centerStar, 45 + Math.random() * 45, 0.02 + Math.random() * 0.03);
             planets.add(planet);
         }
         
@@ -245,7 +246,7 @@ public class GalaxyMain {
                 System.out.println("Cancelled. Your current galaxy is preserved.");
             }
         } else {
-            System.out.println("Your galaxy is already empty. Start adding celestial objects!");
+            System.err.println("Your galaxy is already empty. Start adding celestial objects!");
         }
     }
     
@@ -351,14 +352,3 @@ public class GalaxyMain {
         System.out.println("You can continue adding objects or exit the program.\n");
     }
 }
-                 
-    
-       
-   
-    
-  
-           
-     
-        
-      
-    
