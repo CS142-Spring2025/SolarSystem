@@ -384,4 +384,5 @@ public class GalaxyMain {
         System.out.println("SPARKLES: Galaxy GUI launched successfully!");
         System.out.println("You can continue adding objects or exit the program.\n");
     }
+}
 
