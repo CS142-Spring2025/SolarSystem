@@ -38,41 +38,39 @@ public class GalaxyMain {
         while (running) {
             displayMenu();
             displayCurrentCounts();
-            System.out.print("Enter your choice: ");
-            
+            System.out.print("Enter your choice (1-5): ");
+
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-            
+            scanner.nextLine(); // consume newline
+
             switch (choice) {
                 case 1:
                     addStarWithFlow(scanner);
                     break;
+
                 case 2:
+                    // This brings up the “Asteroid/Comet/Black Hole” submenu
                     addSpaceObjectsMenu(scanner);
                     break;
+
                 case 3:
                     launchGalaxyGUI();
                     break;
+
                 case 4:
                     startNewGalaxy(scanner);
                     break;
+
                 case 5:
-                    addComet(scanner);
-                    break;
-                case 6:
-                    addBlackHole(scanner);
-                    break;
-                case 7:
-                    launchGalaxyGUI();
-                    break;
-                case 8:
                     running = false;
                     System.out.println("Exiting simulation. Goodbye!");
-                    continue;
+                    break;
+
                 default:
                     System.err.println("Invalid choice. Please enter 1-5.");
             }
         }
+
         scanner.close();
     }
     
@@ -223,20 +221,85 @@ public class GalaxyMain {
         
         switch (choice) {
             case 1:
-                addAsteroid(scanner);
+                addAsteroidsWithFlow(scanner);
                 break;
             case 2:
-                addComet(scanner);
+                addCometsWithFlow(scanner);
                 break;
             case 3:
-                addBlackHole(scanner);
+                addBlackHolesWithFlow(scanner);
                 break;
             case 4:
-                return;
+                return;  // back to top‐level menu
             default:
                 System.err.println("Invalid choice. Please enter 1-4.");
         }
     }
+
+    private static void addAsteroidsWithFlow(Scanner scanner) {
+    int remaining = MAX_ASTEROIDS - asteroids.size();
+    if (remaining <= 0) {
+        System.err.println("❌ You already have the maximum of " + MAX_ASTEROIDS + " asteroids.");
+        return;
+    }
+
+    System.out.print("You have " + asteroids.size() + "/" + MAX_ASTEROIDS +
+                     " asteroids. How many would you like to add? ");
+    int num = scanner.nextInt();
+    scanner.nextLine();  // consume newline
+
+    int toAdd = Math.min(num, remaining);
+    for (int i = 0; i < toAdd; i++) {
+        Asteroid a = new Asteroid(Math.random() * 800, Math.random() * 600);
+        asteroids.add(a);
+    }
+    System.out.println("Added " + toAdd + " asteroid(s). Total now: " +
+                       asteroids.size() + "/" + MAX_ASTEROIDS + ".");
+}
+
+private static void addCometsWithFlow(Scanner scanner) {
+    int remaining = MAX_COMETS - comets.size();
+    if (remaining <= 0) {
+        System.err.println("❌ You already have the maximum of " + MAX_COMETS + " comets.");
+        return;
+    }
+
+    System.out.print("You have " + comets.size() + "/" + MAX_COMETS +
+                     " comets. How many would you like to add? ");
+    int num = scanner.nextInt();
+    scanner.nextLine();  // consume newline
+
+    int toAdd = Math.min(num, remaining);
+    for (int i = 0; i < toAdd; i++) {
+        Comet c = new Comet();
+        comets.add(c);
+    }
+    System.out.println("Added " + toAdd + " comet(s). Total now: " +
+                       comets.size() + "/" + MAX_COMETS + ".");
+}
+
+private static void addBlackHolesWithFlow(Scanner scanner) {
+    int remaining = MAX_BLACK_HOLES - blackHoles.size();
+    if (remaining <= 0) {
+        System.err.println("❌ You already have the maximum of " + MAX_BLACK_HOLES + " black holes.");
+        return;
+    }
+
+    System.out.print("You have " + blackHoles.size() + "/" + MAX_BLACK_HOLES +
+                     " black holes. How many would you like to add? ");
+    int num = scanner.nextInt();
+    scanner.nextLine();  // consume newline
+
+    int toAdd = Math.min(num, remaining);
+    for (int i = 0; i < toAdd; i++) {
+        double x = Math.random() * 800;
+        double y = Math.random() * 600;
+        BlackHole bh = new BlackHole(x, y);
+        blackHoles.add(bh);
+    }
+    System.out.println("Added " + toAdd + " black hole(s). Total now: " +
+                       blackHoles.size() + "/" + MAX_BLACK_HOLES + ".");
+}
     
     private static void startNewGalaxy(Scanner scanner) {
         if (!stars.isEmpty() || !planets.isEmpty() || !moons.isEmpty() || 
@@ -280,7 +343,7 @@ public class GalaxyMain {
         
         System.out.println("ROCKET: Launching Galaxy GUI...");
         
-        // Create the simulation grid
+        // Create the simulation model
         GalaxySimulation model = new GalaxySimulation();
         
         // Add all the created objects to the model
@@ -321,6 +384,27 @@ public class GalaxyMain {
         JButton slowDownButton = new JButton("Slow Down");
         JButton returnButton = new JButton("Return to Main");
 
+        pauseButton.addActionListener(e -> galaxyPanel.togglePause());
+        speedUpButton.addActionListener(e -> {
+            galaxyPanel.speedUp();
+            speedLabel.setText(
+                "Click Speed Up/Slow Down multiple times.  Delay: "
+                + galaxyPanel.getAnimationSpeed() + " ms"
+            );
+        });
+        slowDownButton.addActionListener(e -> {
+            galaxyPanel.slowDown();
+            speedLabel.setText(
+                "Click Speed Up/Slow Down multiple times.  Delay: "
+                + galaxyPanel.getAnimationSpeed() + " ms"
+            );
+        });
+        returnButton.addActionListener(e -> {
+            // Disposing the frame will trigger windowClosed() below
+            frame.dispose();
+        });
+
+        
         controls.add(speedLabel);
         controls.add(pauseButton);
         controls.add(speedUpButton);
@@ -332,14 +416,21 @@ public class GalaxyMain {
         frame.add(galaxyPanel, BorderLayout.CENTER);
         frame.add(controls, BorderLayout.SOUTH);
 
-        // Add button actions
-        pauseButton.addActionListener(e -> galaxyPanel.togglePause());
-        speedUpButton.addActionListener(e -> galaxyPanel.speedUp());
-        slowDownButton.addActionListener(e -> galaxyPanel.slowDown());
-        returnButton.addActionListener(e -> {
-            frame.dispose();
-            System.out.println("\nReturning to main program...");
-            // Optionally trigger something in GalaxyMain here
+       final Object lock = new Object();
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                // windowClosing is called when X is clicked. After dispose, windowClosed follows.
+                System.out.println("\nGalaxy GUI closed. Returning to main program...");
+            }
+
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                // Called after dispose(). Wake up main thread.
+                synchronized (lock) {
+                    lock.notify();
+                }
+            }
         });
 
         // Handle "X" close action
@@ -356,5 +447,12 @@ public class GalaxyMain {
 
         System.out.println("SPARKLES: Galaxy GUI launched successfully!");
         System.out.println("You can continue adding objects or exit the program.\n");
+        
+
+        synchronized (lock) {
+        try {
+            lock.wait();
+        } catch (InterruptedException ignored) { }
+    }
     }
 }
