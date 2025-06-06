@@ -110,58 +110,65 @@ public class GalaxyMain {
             System.out.print("Would you like to add a planet to orbit this star? (yes/no): ");
             String response = scanner.nextLine().toLowerCase();
             if (response.equals("y") || response.equals("yes")) {
-                addPlanetsWithFlow(scanner);
+                addPlanetsWithFlow(scanner, star);
             }
         } else {
             System.err.println("(Maximum planets already reached)");
         }
     }
     
-    private static void addPlanetsWithFlow(Scanner scanner) {
-        System.out.print("How many planets would you like to add? (Max remaining: " + 
-                        (MAX_PLANETS - planets.size()) + "): ");
+    private static void addPlanetsWithFlow(Scanner scanner, Star star) {
+        System.out.print("How many planets would you like to add? (Max remaining: " + (MAX_PLANETS - planets.size()) + "): ");
         int numPlanets = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        
+        scanner.nextLine();
+
         int maxToAdd = Math.min(numPlanets, MAX_PLANETS - planets.size());
-        
+        ArrayList<Planet> justAdded = new ArrayList<>();
+
         for (int i = 0; i < maxToAdd; i++) {
-            // Create actual Planet object - it needs something to orbit around
-            Star centerStar = stars.get(0); // for now, orbit the first star
-            Planet planet = new Planet(centerStar, 45 + Math.random() * 45, 0.02 + Math.random() * 0.03);
+            double distance = 60;
+            double spacing = 35;
+            double orbitDistance = distance + i * spacing;
+            double orbitSpeed = 0.015 + Math.random() * 0.01;
+
+            Planet planet = new Planet(star, orbitDistance, orbitSpeed);
             planets.add(planet);
+            justAdded.add(planet);
         }
-        
-        System.out.println("PLANET: Great! You added " + maxToAdd + " planet(s) to the galaxy!");
-        
-        // Ask if they want to add moons
-        if (moons.size() < MAX_MOONS && !planets.isEmpty()) {
+
+        System.out.println("PLANET: Great! You added " + justAdded.size() + " planet(s) to orbit that star!");
+
+        if (moons.size() < MAX_MOONS && !justAdded.isEmpty()) {
             System.out.print("Would you like to add moons to orbit your planets? (y/n): ");
             String response = scanner.nextLine().toLowerCase();
             if (response.equals("y") || response.equals("yes")) {
-                addMoonsWithFlow(scanner);
+                addMoonsWithFlow(scanner, justAdded);
             }
         } else if (moons.size() >= MAX_MOONS) {
             System.out.println("(Maximum moons already reached)");
         }
     }
     
-    private static void addMoonsWithFlow(Scanner scanner) {
-        System.out.print("How many moons would you like to add? (Max remaining: " + 
-                        (MAX_MOONS - moons.size()) + "): ");
+    private static void addMoonsWithFlow(Scanner scanner, ArrayList<Planet> planetList) {
+        System.out.print("How many moons would you like to add? (Max remaining: " + (MAX_MOONS - moons.size()) + "): ");
         int numMoons = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-        
+        scanner.nextLine();
+
         int maxToAdd = Math.min(numMoons, MAX_MOONS - moons.size());
-        
+
         for (int i = 0; i < maxToAdd; i++) {
-            // Create actual Moon object - needs a planet to orbit around
-            Planet parentPlanet = planets.get(i % planets.size()); // Distribute moons among planets
-            Moon moon = new Moon(parentPlanet, 30 + Math.random() * 20, 0.05 + Math.random() * 0.03);
+            double distance = 20;
+            double spacing = 10;
+            
+            Planet mainPlanet = planetList.get(i % planetList.size());
+            double orbitDistance = distance + (i % 3) * spacing;
+            double orbitSpeed = 0.03 + Math.random() * 0.01;
+
+            Moon moon = new Moon(mainPlanet, orbitDistance, orbitSpeed);
             moons.add(moon);
         }
-        
-        System.out.println("MOON: Great! You added " + maxToAdd + " moon(s) to the galaxy!");
+
+        System.out.println("MOON: Great! You added " + maxToAdd + " moon(s) to orbit your planets!");
     }
     
     private static void addAsteroid(Scanner scanner) {
@@ -169,8 +176,7 @@ public class GalaxyMain {
             System.err.println("X Maximum number of asteroids (" + MAX_ASTEROIDS + ") reached!");
             return;
         }
-        
-        
+
         // Create actual Asteroid object
         Asteroid asteroid = new Asteroid(Math.random() * 800, Math.random() * 600);
         asteroids.add(asteroid);
@@ -351,6 +357,4 @@ public class GalaxyMain {
         System.out.println("SPARKLES: Galaxy GUI launched successfully!");
         System.out.println("You can continue adding objects or exit the program.\n");
     }
-
 }
-
