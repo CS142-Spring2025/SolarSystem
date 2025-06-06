@@ -61,6 +61,11 @@ import java.awt.*;
          obj.draw(g2d);  //ask each object to draw itself
          }
       }
+
+        // Draw active Explosions on top of everything
+    for (Explosion ex : model.getExplosions()) {
+        ex.draw(g2d);
+    }
    }
 
 

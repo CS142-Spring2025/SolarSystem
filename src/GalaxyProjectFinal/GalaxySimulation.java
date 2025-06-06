@@ -54,9 +54,9 @@ public class GalaxySimulation {
                             + comA.getClass().getSimpleName()
                             + " and " + b.getClass().getSimpleName());
                         // spawn explosion at comet’s position
-                        explosions.add(new Explosion(comA.getX(), comA.getY()));
                         comA.setDestroyed(true);
                         b.setDestroyed(true);
+                        explosions.add(new Explosion(comA.getX(), comA.getY()));
                         continue;
                     }
                 }
@@ -67,9 +67,9 @@ public class GalaxySimulation {
                             + a.getClass().getSimpleName()
                             + " and " + comB.getClass().getSimpleName());
                         // spawn explosion at comet’s position
-                        explosions.add(new Explosion(comB.getX(), comB.getY()));
                         a.setDestroyed(true);
                         comB.setDestroyed(true);
+                        explosions.add(new Explosion(comB.getX(), comB.getY()));
                         continue;
                     }
                 }
@@ -81,9 +81,10 @@ public class GalaxySimulation {
                     if (astA.collidesWith(astB)) {
                         System.out.println(">>> Asteroid-Asteroid collision: destroying both.");
                         // spawn explosion at astA’s position (or average of both)
-                        explosions.add(new Explosion(astA.getX(), astA.getY()));
                         astA.setDestroyed(true);
                         astB.setDestroyed(true);
+                        explosions.add(new Explosion(astA.getX(), astA.getY()));
+                        explosions.add(new Explosion(astB.getX(), astB.getY()));
                         continue;
                     }
                 }
@@ -183,8 +184,7 @@ public class GalaxySimulation {
                     bh.applyGravitationalPull(b);
                     if (!wasDestroyed && b.isDestroyed()) {
                         // spawn an explosion at b’s last position
-                        explosions.add(new Explosion(b.getX(), b.getY()));
-                        System.out.println(">>> BlackHole at (" 
+                         System.out.println(">>> BlackHole at (" 
                             + String.format("%.1f", bh.getX()) + "," 
                             + String.format("%.1f", bh.getY()) 
                             + ") sucked in " + b.getClass().getSimpleName()
@@ -199,7 +199,6 @@ public class GalaxySimulation {
                     boolean wasDestroyed = a.isDestroyed();
                     bh.applyGravitationalPull(a);
                     if (!wasDestroyed && a.isDestroyed()) {
-                        explosions.add(new Explosion(a.getX(), a.getY()));
                         System.out.println(">>> BlackHole at (" 
                             + String.format("%.1f", bh.getX()) + "," 
                             + String.format("%.1f", bh.getY()) 
