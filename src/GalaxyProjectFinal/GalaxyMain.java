@@ -1,10 +1,12 @@
 package GalaxyProjectFinal;
+
+import java.awt.BorderLayout;
+import java.io.IOException;
+import java.util.*;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.util.*;
 
 public class GalaxyMain {
     // Maximum limits for each celestial object type
@@ -38,7 +40,7 @@ public class GalaxyMain {
         while (running) {
             displayMenu();
             displayCurrentCounts();
-            System.out.print("Enter your choice (1-5): ");
+            System.out.print("Enter your choice (1-6): ");
 
             int choice = scanner.nextInt();
             scanner.nextLine(); // consume newline
@@ -65,9 +67,13 @@ public class GalaxyMain {
                     running = false;
                     System.out.println("Exiting simulation. Goodbye!");
                     break;
+                
+                case 6:    
+                    loadAndLaunchConfiguration();
+                    break;  
 
                 default:
-                    System.err.println("Invalid choice. Please enter 1-5.");
+                    System.err.println("Invalid choice. Please enter 1-6.");
             }
         }
 
@@ -81,6 +87,7 @@ public class GalaxyMain {
         System.out.println("3. Launch Simulation");
         System.out.println("4. Start Over");
         System.out.println("5. Exit");
+        System.out.println("6. Load Saved Galaxy Configuration");
         System.out.println();
     }
     
@@ -318,6 +325,8 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
             System.err.println("Your galaxy is already empty. Start adding celestial objects!");
         }
     }
+        
+        
     
     private static void clearGalaxy() {
         stars.clear();
@@ -365,10 +374,16 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
         for (BlackHole blackHole : blackHoles) {
             model.addObject(blackHole);
         }
+
+        
+        Configuration currentConfig = new Configuration(stars, planets, moons, asteroids, comets, blackHoles);
+        Configuration initialConfig = currentConfig.cloneInitial();
         
         //create the GalaxyGUI panel with the model (for control buttons)
-        GalaxyGUI galaxyPanel = new GalaxyGUI(model);
+        GalaxyGUI galaxyPanel = new GalaxyGUI(model, initialConfig);
 
+        
+        
         // Launch the GUI and pass it the model
         JFrame frame = new JFrame("Galaxy Simulation");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -383,7 +398,17 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
         JButton speedUpButton = new JButton("Speed Up");
         JButton slowDownButton = new JButton("Slow Down");
         JButton returnButton = new JButton("Return to Main");
+        JButton restartButton = new JButton("Restart with Current");
+        JButton saveButton = new JButton("Save Galaxy");
+        
 
+        restartButton.addActionListener(e -> {
+            galaxyPanel.restart();
+    });
+
+        saveButton.addActionListener(e -> galaxyPanel.saveConfiguration());
+
+       
         pauseButton.addActionListener(e -> galaxyPanel.togglePause());
         speedUpButton.addActionListener(e -> {
             galaxyPanel.speedUp();
@@ -392,6 +417,7 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
                 + galaxyPanel.getAnimationSpeed() + " ms"
             );
         });
+
         slowDownButton.addActionListener(e -> {
             galaxyPanel.slowDown();
             speedLabel.setText(
@@ -405,16 +431,20 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
         });
 
         
+        
         controls.add(speedLabel);
         controls.add(pauseButton);
         controls.add(speedUpButton);
         controls.add(slowDownButton);
         controls.add(returnButton);
+        controls.add(restartButton);
+        controls.add(saveButton);
+        
 
         // Layout: add simulation panel + controls
         frame.setLayout(new BorderLayout());
         frame.add(galaxyPanel, BorderLayout.CENTER);
-        frame.add(controls, BorderLayout.SOUTH);
+        frame.add(createControlsPanel(galaxyPanel, frame), BorderLayout.SOUTH);
 
        final Object lock = new Object();
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -455,4 +485,93 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
         } catch (InterruptedException ignored) { }
     }
     }
+    
+        //methods for new restart button
+        
+       
+
+        public static void loadAndLaunchConfiguration() {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter the name of the configuration to load: ");
+            String name = scanner.nextLine();
+            String filename = "config_" + name + ".txt";
+
+            try {
+                Configuration config = Configuration.loadFromFile(filename);
+                GalaxySimulation model = new GalaxySimulation();
+
+                for (Star star : config.getStars()) model.addObject(star);
+                for (Planet planet : config.getPlanets()) model.addObject(planet);
+                for (Moon moon : config.getMoons()) model.addObject(moon);
+                for (Asteroid asteroid : config.getAsteroids()) model.addObject(asteroid);
+                for (Comet comet : config.getComets()) model.addObject(comet);
+                for (BlackHole blackHole : config.getBlackHoles()) model.addObject(blackHole);
+
+                GalaxyGUI gui = new GalaxyGUI(model, config);
+
+                JFrame frame = new JFrame("Galaxy Simulation (Loaded)");
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.setLayout(new BorderLayout());
+                frame.add(gui, BorderLayout.CENTER);
+                frame.add(createControlsPanel(gui, frame), BorderLayout.SOUTH);
+                frame.pack();
+                frame.setVisible(true);
+
+            } catch (IOException e) {
+                System.err.println("❌ Could not load configuration: " + e.getMessage());
+            }
+        }
+
+        public static JPanel createControlsPanel (
+            GalaxyGUI galaxyPanel,
+            JFrame frame) {
+            JLabel speedLabel = new JLabel("Click Speed Up/Slow Down multiple times.  Delay: "
+            + galaxyPanel.getAnimationSpeed() + " ms");
+
+            JPanel controls = new JPanel();
+
+            JButton pauseButton = new JButton("Pause/Resume");
+            JButton speedUpButton = new JButton("Speed Up");
+            JButton slowDownButton = new JButton("Slow Down");
+            JButton returnButton = new JButton("Return to Main");
+            JButton restartButton = new JButton("Restart with Current");
+            JButton saveButton = new JButton("Save Galaxy");
+            
+
+            pauseButton.addActionListener(e -> galaxyPanel.togglePause());
+
+            speedUpButton.addActionListener(e -> {
+                galaxyPanel.speedUp();
+                speedLabel.setText("Click Speed Up/Slow Down multiple times.  Delay: "
+                        + galaxyPanel.getAnimationSpeed() + " ms");
+            });
+
+            slowDownButton.addActionListener(e -> {
+                galaxyPanel.slowDown();
+                speedLabel.setText("Click Speed Up/Slow Down multiple times.  Delay: "
+                        + galaxyPanel.getAnimationSpeed() + " ms");
+            });
+
+            returnButton.addActionListener(e -> frame.dispose());
+
+            restartButton.addActionListener(e -> galaxyPanel.restart());
+
+            saveButton.addActionListener(e -> galaxyPanel.saveConfiguration());
+
+            
+
+            controls.add(speedLabel);
+            controls.add(pauseButton);
+            controls.add(speedUpButton);
+            controls.add(slowDownButton);
+            controls.add(returnButton);
+            controls.add(restartButton);
+            controls.add(saveButton);
+            
+
+            return controls;
+        }
+
+
+
 }

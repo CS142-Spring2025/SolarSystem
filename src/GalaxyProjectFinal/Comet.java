@@ -1,7 +1,7 @@
 package GalaxyProjectFinal;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Random;
 
 
@@ -126,7 +126,7 @@ public boolean collidesWith(Celestial other) {
         otherRadius = ((Star) other).getSize() / 2.0;
     }
     else {
-        // We don’t handle collisions with Moons (for now).
+        
         return false;
     }
 

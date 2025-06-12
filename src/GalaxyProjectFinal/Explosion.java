@@ -3,10 +3,25 @@ package GalaxyProjectFinal;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
+/*
+
+ * @author Emma Dennis
+ * CIS142 - Final Project
+ * 6/04/2025
+ * 
+ * Temporary explosion effect for collisions
+ * - expands outward in a radius over time
+ * - fades in transparency as it ages
+ * - auto-deletes after a set time
+ * 
+ * used by Simulation and rended by the GUI
+ * 
+ */
+
 public class Explosion {
     private final double x, y;
-    private      int    age   = 0;
-    private final int    maxAge = 20;  // number of frames before it vanishes
+    private int age   = 0;
+    private final int maxAge = 20;  // number of frames before it vanishes
 
     public Explosion(double x, double y) {
         this.x = x;

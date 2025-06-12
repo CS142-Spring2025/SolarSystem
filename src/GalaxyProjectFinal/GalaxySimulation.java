@@ -3,16 +3,20 @@ package GalaxyProjectFinal;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * The "Brains" of the galaxy.  Will contain/manage all celestial objects
- * because each object knows its own position, size and behavior. The model provides:
- *  - a way to add new objects
- *  - a way to update the galaxy's state each tick of the timer
- *  - a way to let the GUI access the objects for drawing (including explosions)
- */
+/**
+ * @author Emma Dennis
+ * CIS142 - Final Project
+ * 5/29/2025
+
+ * The "Brains" of the galaxy.  Will contain/manage all celestial objects / their interactions.
+ *  The model provides:
+ *  - updates object positions, handles collision logic
+ *  - maintains a list of explosioons for rendering
+ *  - is called repeatedly by the GUI timer to update the simulation
+ **/
 public class GalaxySimulation {
     private List<Celestial> objects;           // list that holds all celestial objects
-    private List<Explosion>  explosions = new ArrayList<>();  // active explosion effects
+    private List<Explosion>  explosions = new ArrayList<>();  // active explosion
 
     public GalaxySimulation() {
         objects = new ArrayList<>();
@@ -31,8 +35,11 @@ public class GalaxySimulation {
         return explosions;
     }
 
+    
+       
+
     public void update() {
-        // 1) Move every object
+        // 1) Move each object according to its logic
         for (Celestial obj : objects) {
             obj.update();
         }
@@ -92,17 +99,17 @@ public class GalaxySimulation {
                 // --- ASTEROID vs. PLANET or PLANET vs. ASTEROID ---
                 if (a instanceof Asteroid && b instanceof Planet) {
                     Asteroid ast = (Asteroid) a;
-                    Planet    pl  = (Planet)  b;
+                    Planet pl  = (Planet)  b;
                     if (ast.collidesWith(pl)) {
                         System.out.print(">>> Asteroid-Planet collision: destroying Asteroid. ");
                         // always destroy the asteroid
-                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         ast.setDestroyed(true);
+                        explosions.add(new Explosion(ast.getX(), ast.getY()));
 
                         // 50/50 chance planet also destroyed
                         if (Math.random() < 0.5) {
-                            explosions.add(new Explosion(pl.getX(), pl.getY()));
                             pl.setDestroyed(true);
+                            explosions.add(new Explosion(pl.getX(), pl.getY()));
                             System.out.println("Planet was destroyed too.");
                         } else {
                             System.out.println("Planet survived.");
@@ -111,12 +118,12 @@ public class GalaxySimulation {
                     }
                 }
                 if (a instanceof Planet && b instanceof Asteroid) {
-                    Planet    pl  = (Planet)  a;
-                    Asteroid  ast = (Asteroid) b;
+                    Planet pl  = (Planet)  a;
+                    Asteroid ast = (Asteroid) b;
                     if (ast.collidesWith(pl)) {
                         System.out.println(">>> Planet-Asteroid collision: destroying Asteroid; Planet survives.");
-                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         ast.setDestroyed(true);
+                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         continue;
                     }
                 }
@@ -127,13 +134,13 @@ public class GalaxySimulation {
                     Moon     mo  = (Moon)     b;
                     if (ast.collidesWith(mo)) {
                         // always destroy the asteroid
-                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         ast.setDestroyed(true);
+                        explosions.add(new Explosion(ast.getX(), ast.getY()));
 
                         // 50/50 chance moon destroyed
                         if (Math.random() < 0.5) {
-                            explosions.add(new Explosion(mo.getX(), mo.getY()));
                             mo.setDestroyed(true);
+                            explosions.add(new Explosion(mo.getX(), mo.getY()));
                             System.out.println(">>> Asteroid-Moon collision: destroying Asteroid; Moon was destroyed.");
                         } else {
                             System.out.println(">>> Asteroid-Moon collision: destroying Asteroid; Moon survived.");
@@ -146,8 +153,8 @@ public class GalaxySimulation {
                     Asteroid ast = (Asteroid) b;
                     if (ast.collidesWith(mo)) {
                         // moon hits asteroid → destroy asteroid, moon survives
-                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         ast.setDestroyed(true);
+                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         System.out.println(">>> Moon-Asteroid collision: destroying Asteroid; Moon survives.");
                         continue;
                     }
@@ -158,8 +165,8 @@ public class GalaxySimulation {
                     Asteroid ast = (Asteroid) a;
                     Star     st  = (Star)     b;
                     if (ast.collidesWith(st)) {
-                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         ast.setDestroyed(true);
+                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         System.out.println(">>> Asteroid-Star collision: destroying Asteroid.");
                         continue;
                     }
@@ -168,8 +175,8 @@ public class GalaxySimulation {
                     Star     st  = (Star)     a;
                     Asteroid ast = (Asteroid) b;
                     if (ast.collidesWith(st)) {
-                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         ast.setDestroyed(true);
+                        explosions.add(new Explosion(ast.getX(), ast.getY()));
                         System.out.println(">>> Star-Asteroid collision: destroying Asteroid.");
                         continue;
                     }

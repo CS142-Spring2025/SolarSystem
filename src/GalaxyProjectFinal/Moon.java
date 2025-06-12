@@ -10,7 +10,7 @@ public class Moon extends Orbit {
     // A Moon constructor which calls the super for the planet's x and y coordinates, the orbit's radius and speed, and mass 160 and size 10
     // Grabs planet's coordinates in order to know the center point of the planet and orbit around it
     public Moon(Planet planet, double radius, double speed) {
-        super(planet.getX(), planet.getY(), radius, speed, 160, 10);
+        super(planet, radius, speed, 160, 10);
         
         this.planet = planet;
     }
@@ -19,7 +19,6 @@ public class Moon extends Orbit {
     // calls the super to update the moon's position
     @Override
     public void update() {
-        setCenter(planet.getX(), planet.getY());
         super.update();
     }
     
