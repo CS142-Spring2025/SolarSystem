@@ -160,59 +160,7 @@ public class GalaxySimulation {
                     }
                 }
                 
-                // --- PLANET vs. MOON or MOON vs. PLANET ---
-                if (a instanceof Planet && b instanceof Moon) {
-                    Planet pl = (Planet) a;
-                    Moon mo = (Moon) b;
-                    if (pl.collidesWith(mo)) {
-                        System.out.println(">>> Planet-Moon collision: destroying both.");
-                        pl.setDestroyed(true);
-                        mo.setDestroyed(true);
-                        explosions.add(new Explosion(pl.getX(), pl.getY()));
-                        explosions.add(new Explosion(mo.getX(), mo.getY()));
-                        continue;
-                    }
-                }
-                if (a instanceof Moon && b instanceof Planet) {
-                    Moon mo = (Moon) a;
-                    Planet pl = (Planet) b;
-                    if (mo.collidesWith(pl)) {
-                        System.out.println(">>> Moon-Planet collision: destroying both.");
-                        mo.setDestroyed(true);
-                        pl.setDestroyed(true);
-                        explosions.add(new Explosion(mo.getX(), mo.getY()));
-                        explosions.add(new Explosion(pl.getX(), pl.getY()));
-                        continue;
-                    }
-                }
-
-                // --- MOON vs. MOON ---
-                if (a instanceof Moon && b instanceof Moon) {
-                    Moon m1 = (Moon) a;
-                    Moon m2 = (Moon) b;
-                    if (m1.collidesWith(m2)) {
-                        System.out.println(">>> Moon-Moon collision: destroying both.");
-                        m1.setDestroyed(true);
-                        m2.setDestroyed(true);
-                        explosions.add(new Explosion(m1.getX(), m1.getY()));
-                        explosions.add(new Explosion(m2.getX(), m2.getY()));
-                        continue;
-                    }
-                }
-
-                // --- PLANET vs. PLANET ---
-                if (a instanceof Planet && b instanceof Planet) {
-                    Planet p1 = (Planet) a;
-                    Planet p2 = (Planet) b;
-                    if (p1.collidesWith(p2)) {
-                        System.out.println(">>> Planet-Planet collision: destroying both.");
-                        p1.setDestroyed(true);
-                        p2.setDestroyed(true);
-                        explosions.add(new Explosion(p1.getX(), p1.getY()));
-                        explosions.add(new Explosion(p2.getX(), p2.getY()));
-                        continue;
-                    }
-                }
+              
                 
                 // --- ASTEROID vs. STAR or STAR vs. ASTEROID ---
                 if (a instanceof Asteroid && b instanceof Star) {
