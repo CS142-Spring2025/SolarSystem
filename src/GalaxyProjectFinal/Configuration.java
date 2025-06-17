@@ -59,12 +59,12 @@ public class Configuration {
     }
     for (Planet p : planets) {
         sb.append("Planet,")
-          .append(p.getX()).append(",").append(p.getY()).append(",")
+          .append(p.getXCenter()).append(",").append(p.getYCenter()).append(",")
           .append(p.getRadius()).append(",").append(p.getSpeed()).append("\n");
     }
     for (Moon m : moons) {
         sb.append("Moon,")
-          .append(m.getX()).append(",").append(m.getY()).append(",")
+          .append(m.getXCenter()).append(",").append(m.getYCenter()).append(",")
           .append(m.getRadius()).append(",").append(m.getSpeed()).append("\n");
     }
     for (Asteroid a : asteroids) {
@@ -81,6 +81,24 @@ public class Configuration {
     return sb.toString();
     }
 
+    private static Star findStarByPosition(List<Star> stars, double x, double y) {
+        for (Star star : stars) {
+            if (Math.abs(star.getX() - x) < 0.001 && Math.abs(star.getY() - y) < 0.001) {
+                return star;
+            }
+        }
+        return null;
+    }
+
+    private static Planet findPlanetByPosition(List<Planet> planets, double x, double y) {
+    for (Planet p : planets) {
+        if (Math.abs(p.getX() - x) < 0.001 && Math.abs(p.getY() - y) < 0.001) {
+            return p;
+        }
+    }
+    return null;
+}
+
 public static Configuration loadFromFile(String filename) throws IOException {
     List<Star> stars = new ArrayList<>();
     List<Planet> planets = new ArrayList<>();
@@ -89,31 +107,53 @@ public static Configuration loadFromFile(String filename) throws IOException {
     List<Comet> comets = new ArrayList<>();
     List<BlackHole> blackHoles = new ArrayList<>();
 
+    Map<String, Star> starMap = new HashMap<>();
+    Map<String, Planet> planetMap = new HashMap<>();
+
     BufferedReader reader = new BufferedReader(new FileReader(filename));
     String line;
     while ((line = reader.readLine()) != null) {
         String[] parts = line.split(",");
         switch (parts[0]) {
             case "Star":
-                stars.add(new Star(
-                    Double.parseDouble(parts[1]),
-                    Double.parseDouble(parts[2])));
+                double sx = Double.parseDouble(parts[1]);
+                double sy = Double.parseDouble(parts[2]);
+                Star star = new Star(sx, sy);
+                stars.add(star);
+                starMap.put(sx + "," + sy, star);
                 break;
 
             case "Planet":
-                Planet p = new Planet(
-                    new Star(Double.parseDouble(parts[1]), Double.parseDouble(parts[2])),  // dummy center
-                    Double.parseDouble(parts[3]),
-                    Double.parseDouble(parts[4]));
-                planets.add(p);
+                double px = Double.parseDouble(parts[1]);
+                double py = Double.parseDouble(parts[2]);
+                double radius = Double.parseDouble(parts[3]);
+                double speed = Double.parseDouble(parts[4]);
+
+               Star centerStar = findStarByPosition(stars, px, py);
+                if (centerStar == null) {
+                    System.err.println("⚠️ No matching star found for planet center at (" + px + ", " + py + ")");
+                    centerStar = new Star(px, py);
+                }
+
+                Planet planet = new Planet(centerStar, radius, speed);
+                planets.add(planet);
+                planetMap.put(px + "," + py, planet); // assume center also holds planet
                 break;
 
             case "Moon":
-                Moon m = new Moon(
-                    new Planet(new Star(Double.parseDouble(parts[1]), Double.parseDouble(parts[2])), 0, 0), // dummy center
-                    Double.parseDouble(parts[3]),
-                    Double.parseDouble(parts[4]));
-                moons.add(m);
+                double mx = Double.parseDouble(parts[1]);
+                double my = Double.parseDouble(parts[2]);
+                double mRadius = Double.parseDouble(parts[3]);
+                double mSpeed = Double.parseDouble(parts[4]);
+
+                Planet centerPlanet = findPlanetByPosition(planets, mx, my);
+                if (centerPlanet == null) {
+                    System.err.println("⚠️ No matching planet found for moon center at (" + mx + ", " + my + ")");
+                    centerPlanet = new Planet(new Star(mx, my), 0, 0);
+                }
+
+                Moon moon = new Moon(centerPlanet, mRadius, mSpeed);
+                moons.add(moon);
                 break;
 
             case "Asteroid":
@@ -122,13 +162,12 @@ public static Configuration loadFromFile(String filename) throws IOException {
                     Double.parseDouble(parts[2])));
                 break;
 
-            case "Comet":                
+            case "Comet":
                 double cx = Double.parseDouble(parts[1]);
                 double cy = Double.parseDouble(parts[2]);
                 double dx = Double.parseDouble(parts[3]);
                 double dy = Double.parseDouble(parts[4]);
-                Comet c = new Comet(cx, cy, dx, dy);
-                comets.add(c);
+                comets.add(new Comet(cx, cy, dx, dy));
                 break;
 
             case "BlackHole":
@@ -142,30 +181,63 @@ public static Configuration loadFromFile(String filename) throws IOException {
     return new Configuration(stars, planets, moons, asteroids, comets, blackHoles);
     }
 
+
+        
     public Configuration cloneInitial() {
         List<Star> clonedStars = new ArrayList<>();
-        Map<Star, Star> starMap = new HashMap<>();
         for (Star s : stars) {
             Star clone = new Star(s.getX(), s.getY());
             clonedStars.add(clone);
-            starMap.put(s, clone);
+            
     }
 
         List<Planet> clonedPlanets = new ArrayList<>();
-            Map<Planet, Planet> planetMap = new HashMap<>();
         for (Planet p : planets) {
-            Star originalCenter = (Star) p.getCenter();  // assuming getCenter() returns the Star
-            Star newCenter = starMap.get(originalCenter);
+            Star originalCenter = (Star) p.getCenter();
+            Star newCenter = findStarByPosition(clonedStars, originalCenter.getX(), originalCenter.getY());
+            if (newCenter == null) {
+                System.err.println("⚠️ Couldn't find cloned star for planet at center (" + originalCenter.getX() + ", " + originalCenter.getY() + ")");
+                newCenter = new Star(originalCenter.getX(), originalCenter.getY());
+            }
+        
+
+            for (Star cs : clonedStars) {
+                if (Math.abs(cs.getX() - originalCenter.getX()) < 0.001 &&
+                    Math.abs(cs.getY() - originalCenter.getY()) < 0.001) {
+                    newCenter = cs;
+                    break;
+                }
+            }  
+
             Planet clone = new Planet(newCenter, p.getRadius(), p.getSpeed());
             clonedPlanets.add(clone);
-            planetMap.put(p, clone);
-        }
+    }
 
         List<Moon> clonedMoons = new ArrayList<>();
         for (Moon m : moons) {
-        Planet originalCenter = (Planet) m.getCenter();  // assuming getCenter() returns the Planet
-        Planet newCenter = planetMap.get(originalCenter);
-        clonedMoons.add(new Moon(newCenter, m.getRadius(), m.getSpeed()));
+            Planet originalCenter = (Planet) m.getCenter();
+            Planet newCenter = findPlanetByPosition(clonedPlanets, originalCenter.getX(), originalCenter.getY());
+            if (newCenter == null) {
+                System.err.println("⚠️ Couldn't find cloned planet for moon at center (" + originalCenter.getX() + ", " + originalCenter.getY() + ")");
+                newCenter = new Planet(new Star(originalCenter.getX(), originalCenter.getY()), 0, 0);
+            }
+
+            for (Planet cp : clonedPlanets) {
+                if (Math.abs(cp.getX() - originalCenter.getX()) < 0.001 &&
+                    Math.abs(cp.getY() - originalCenter.getY()) < 0.001) {
+                    newCenter = cp;
+                    break;
+                }
+            }
+            if (newCenter == null) {
+                System.err.println("⚠️ Couldn't find cloned planet for moon at center (" +
+                                    originalCenter.getX() + ", " + originalCenter.getY() + ")");
+                continue;
+            }
+
+            Moon clone = new Moon(newCenter, m.getRadius(), m.getSpeed());
+            clonedMoons.add(clone);
+
         }
 
         List<Asteroid> clonedAsteroids = new ArrayList<>();

@@ -1,10 +1,9 @@
 package GalaxyProjectFinal;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Color;
 import java.util.Random;
-import java.math.*;
 
 public class Asteroid extends Celestial {
     private double dx, dy, rotationAngle, rotationSpeed;
@@ -75,6 +74,24 @@ public class Asteroid extends Celestial {
         g2d.translate(-getX(), -getY());
     }
     
+   
+    
+    public double getDx() { 
+        return dx; 
+    }
+    
+    public double getDy() { 
+        return dy; 
+    }
+    
+    public void setDx(double dx) {
+        this.dx = dx; 
+    }
+    
+    public void setDy(double dy) { 
+        this.dy = dy; 
+    }
+
     /** 
      * Returns true if “this” asteroid overlaps the other Celestial. 
      * We treat “radius” = getSize()/2 for every object (Asteroid, Comet, Planet).
@@ -124,21 +141,5 @@ public class Asteroid extends Celestial {
       + String.format("%.1f", other.getY()) 
       + ") → both were destroyed"
         );
-    }
-    
-    public double getDx() { 
-        return dx; 
-    }
-    
-    public double getDy() { 
-        return dy; 
-    }
-    
-    public void setDx(double dx) {
-        this.dx = dx; 
-    }
-    
-    public void setDy(double dy) { 
-        this.dy = dy; 
     }
 }

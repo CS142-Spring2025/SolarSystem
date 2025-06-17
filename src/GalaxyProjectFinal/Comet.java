@@ -98,10 +98,11 @@ public class Comet extends Celestial {
         g2d.fillOval((int)(x - size/4), (int)(y - size/4), size/2, size/2);
     }
     
-    /**
+/**  
  * Returns true if “this” comet overlaps the other Celestial.
  * We treat “radius” = getSize()/2 for every object (Asteroid, Comet, Planet).
  */
+
 public boolean collidesWith(Celestial other) {
     double dx = other.getX() - this.getX();
     double dy = other.getY() - this.getY();
@@ -133,6 +134,7 @@ public boolean collidesWith(Celestial other) {
    return dist < (myRadius + otherRadius);
 }
 
+
 /** 
  * When two comets collide, destroy both.  Or if a comet hits an asteroid, destroy both.
  */
@@ -147,4 +149,5 @@ public boolean collidesWith(Celestial other) {
             System.out.println(">>> Comet–Asteroid collision: " + this + " & " + other);
         }
     }
+   
 }

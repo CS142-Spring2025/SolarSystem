@@ -41,9 +41,9 @@ public class Celestial {
     this.mass = mass;
 }
 
-public void setSize(int size) {
-    this.size = size;
-}
+    public void setSize(int size) {
+        this.size = size;
+    }
     
     // A setX method that sets the updated x position
     public void setX(double x) {
@@ -69,6 +69,7 @@ public void setSize(int size) {
     public String getType() {
         throw new UnsupportedOperationException("Type not found");
     }
+
 
     public boolean isDestroyed() {
         return destroyed;

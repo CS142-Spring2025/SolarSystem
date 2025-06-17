@@ -19,6 +19,9 @@ public class Orbit extends Celestial {
         this.radius = radius;
         this.speed = speed;
         this.angle = 0;
+
+        this.XCenter = center.getX(); 
+        this.YCenter = center.getY();
     }
     
     // A getXCenter method which returns the X coordinate of the orbit's center

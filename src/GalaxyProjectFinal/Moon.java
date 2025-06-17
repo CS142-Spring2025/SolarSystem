@@ -34,4 +34,5 @@ public class Moon extends Orbit {
     public String getType() {
         return "Moon";
     }
+
 }

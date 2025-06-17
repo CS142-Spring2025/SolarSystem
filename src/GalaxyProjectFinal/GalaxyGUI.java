@@ -53,6 +53,12 @@ import javax.swing.*;
     public int getAnimationSpeed() {
         return animationSpeed;
     }
+
+    public void stopSimulation() {
+      if (timer != null && timer.isRunning()) {
+         timer.stop();         
+      }
+    }
             
 
     @Override
@@ -102,6 +108,8 @@ import javax.swing.*;
    }
 
    public void restart() {
+      //stop the current timer
+      this.stopSimulation();
 
       //create a fresh simulation model
       GalaxySimulation newModel = new GalaxySimulation();

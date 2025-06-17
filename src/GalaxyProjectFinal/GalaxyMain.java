@@ -1,5 +1,11 @@
 package GalaxyProjectFinal;
 
+/**
+ @author Ruth Karen Nakigozi 
+ @author Kaitlyn Le
+ @author Emma Dennis
+ **/
+
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.*;
@@ -373,7 +379,7 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
         }
         for (BlackHole blackHole : blackHoles) {
             model.addObject(blackHole);
-        }
+            }
 
         
         Configuration currentConfig = new Configuration(stars, planets, moons, asteroids, comets, blackHoles);
@@ -491,6 +497,7 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
        
 
         public static void loadAndLaunchConfiguration() {
+            clearGalaxy();
             Scanner scanner = new Scanner(System.in);
             System.out.print("Enter the name of the configuration to load: ");
             String name = scanner.nextLine();
@@ -500,14 +507,17 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
                 Configuration config = Configuration.loadFromFile(filename);
                 GalaxySimulation model = new GalaxySimulation();
 
-                for (Star star : config.getStars()) model.addObject(star);
+                for (Star star : config.getStars()) model.addObject(star);                
                 for (Planet planet : config.getPlanets()) model.addObject(planet);
                 for (Moon moon : config.getMoons()) model.addObject(moon);
                 for (Asteroid asteroid : config.getAsteroids()) model.addObject(asteroid);
                 for (Comet comet : config.getComets()) model.addObject(comet);
                 for (BlackHole blackHole : config.getBlackHoles()) model.addObject(blackHole);
+                stars.addAll(config.getStars());
+                planets.addAll(config.getPlanets());
+                moons.addAll(config.getMoons());
 
-                GalaxyGUI gui = new GalaxyGUI(model, config);
+                GalaxyGUI gui = new GalaxyGUI(model, config.cloneInitial());
 
                 JFrame frame = new JFrame("Galaxy Simulation (Loaded)");
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -515,10 +525,34 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
                 frame.add(gui, BorderLayout.CENTER);
                 frame.add(createControlsPanel(gui, frame), BorderLayout.SOUTH);
                 frame.pack();
+
+                final Object lock = new Object();
+
+                frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.out.println("\nGalaxy GUI closed. Returning to main program...");
+                    }
+
+                    @Override
+                    public void windowClosed(java.awt.event.WindowEvent e) {
+                        synchronized (lock) {
+                            lock.notify();
+                        }
+                    }
+                });
+
                 frame.setVisible(true);
 
-            } catch (IOException e) {
-                System.err.println("❌ Could not load configuration: " + e.getMessage());
+                synchronized (lock) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException ignored) { 
+                    }
+                }
+            
+        } catch (IOException e) {
+                System.err.println("❌ Error loading configuration: " + e.getMessage());
             }
         }
 
@@ -552,7 +586,11 @@ private static void addBlackHolesWithFlow(Scanner scanner) {
                         + galaxyPanel.getAnimationSpeed() + " ms");
             });
 
-            returnButton.addActionListener(e -> frame.dispose());
+            returnButton.addActionListener(e -> {
+                galaxyPanel.stopSimulation();
+                frame.dispose();
+                GalaxyMain.displayMenu();
+            });
 
             restartButton.addActionListener(e -> galaxyPanel.restart());
 
