@@ -15,8 +15,7 @@ import java.awt.*;
  * @author Emma Dennis
  * @see java.awt.Color
  * @see java.awt.Graphics
- * @see java.awt.Graphics2D
- * @see java.util.Random
+ * 
  */
 
 // Uses a Moon class which orbits a planet

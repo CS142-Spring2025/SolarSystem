@@ -15,8 +15,7 @@ import java.awt.*;
  * @see java.awt.Color
  * @see java.awt.Graphics
  * @see java.awt.Graphics2D
- * @see java.util.Random
- */
+*/
 
 
 // A Star class extends the superclass Celestial

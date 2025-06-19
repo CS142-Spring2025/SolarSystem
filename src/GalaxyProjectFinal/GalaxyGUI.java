@@ -27,6 +27,9 @@ import javax.swing.*;
  * @see java.awt.Graphics
  * @see java.awt.Graphics2D
  * @see java.util.Random
+ * @see java.io.IOException
+ * @see java.io.PrintWriter
+ * @see java.swing.JPanel
  */
 
 

@@ -22,6 +22,11 @@ import javax.swing.JPanel;
  * @see java.awt.Graphics
  * @see java.awt.Graphics2D
  * @see java.util.Random
+ * @see java.awt.BorderLayout
+ * @see javax.swing.JButton
+ * @see javax.swing.JFrame  
+ * @see javax.swing.JLabel
+ * @see javax.swing.JPanel  
  */
  
 public class GalaxyMain {

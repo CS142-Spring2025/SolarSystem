@@ -4,17 +4,22 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.util.Random;
 
-/**
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- * Class        BlackHole
- * Description   Defines the behavior of our Blackhole  
- * @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
- * Date          5/29/2025
- * History Log    
-
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ /**
+ * Defines the behavior of our Blackhole  
+ *
+ * <p><b>Project:</b> GalaxyProjectFinal</p>
+ * <p><b>Date:</b> 6/18/2025</p>
+ *
+ * @author Kaitlyn Le
+ * @author Ruth Karen Nakigozi
+ * @author Emma Dennis
+ * @see java.awt.Color
+ * @see java.awt.Graphics
+ * @see java.awt.Graphics2D
+ * @see java.util.Random
  */
+
 public class BlackHole extends Celestial {
     private double pullStrength, eventHorizonRadius, influenceRadius, rotationAngle;
     private static final Random random = new Random();

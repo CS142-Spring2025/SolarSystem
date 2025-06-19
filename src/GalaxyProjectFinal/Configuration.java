@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
  /**
  * Configuration class to save and manage placement of objects and saving to a file
  *
@@ -24,6 +22,13 @@ import java.util.Map;
  * @see java.awt.Graphics
  * @see java.awt.Graphics2D
  * @see java.util.Random
+ * @see java.io.FileReader
+ * @see java.io.BufferedReader
+ * @see java.io.IOException
+ * @see java.util.ArrayList
+ * @see java.util.HashMap
+ * @see java.util.List
+ * @see java.util.Map
  */
 
 public class Configuration {
