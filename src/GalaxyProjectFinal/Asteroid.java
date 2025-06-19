@@ -10,7 +10,7 @@ import java.util.Random;
  *<pre>
  * Class         Asteroid
  * File          Asteroid.java
- * Description   A class representing the details of a asteroid in a galaxy
+ * Description   Class representing the details of a asteroid in a galaxy
  *               simulation. Defines the behavior of an asteroid, randomly
  *               places along the edges and moves inwards. Collisions may also occur
  *               and shows when colliding with other celestial bodies.
