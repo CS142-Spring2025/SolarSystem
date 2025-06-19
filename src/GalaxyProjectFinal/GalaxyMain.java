@@ -2,11 +2,11 @@ package GalaxyProjectFinal;
 /**
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *<pre>
- * Class        Main
- * Description   The main menu that provides user interaction and initaially populates the galaxy
- * @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
- * Date          5/29/2025
- * History Log    
+  Class        Main
+  Description   The main menu that provides user interaction and initaially populates the galaxy
+  @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
+  Date          5/29/2025
+  History Log    
  *</pre>
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */

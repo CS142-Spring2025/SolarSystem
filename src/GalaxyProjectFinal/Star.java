@@ -2,6 +2,23 @@ package GalaxyProjectFinal;
 
 import java.awt.*;
 
+ /**
+ * Defines the behavior of stars
+ *               which are the center of the solar system
+ *
+ * <p><b>Project:</b> GalaxyProjectFinal</p>
+ * <p><b>Date:</b> 6/18/2025</p>
+ *
+ * @author Kaitlyn Le
+ * @author Ruth Karen Nakigozi
+ * @author Emma Dennis
+ * @see java.awt.Color
+ * @see java.awt.Graphics
+ * @see java.awt.Graphics2D
+ * @see java.util.Random
+ */
+
+
 // A Star class extends the superclass Celestial
 public class Star extends Celestial {
     

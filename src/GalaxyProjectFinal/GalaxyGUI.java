@@ -5,24 +5,26 @@ import java.io.PrintWriter;
 import javax.swing.*;
 
 /**
- *
- * @author Emma Dennis
- * CIS142 - Final Project
- * 5/29/2025
- * 
- */
-/*
- * The visual display - the GUI file
- * The GUI acts like a projector asking the model for the list of objects.
- * it loops through the list and asks each object to draw itself (no grid - positions are continuous / floating-point pixel coords)
- * 
- * It inherits from JPanel and will use a swing timer to advance the simulation
- * on each timer tick, updates simulation state and repaints the view
- * Provides controls for pausing, speeding up, slowing down the simulation
- * provide basic controls - start, pause, etc...)
- * 
- * delegates all drawing to the Celestial objects themselves
- * Displays temp explosion effects during collisions
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *<pre>
+ Class        GalaxyGUI
+ File        GalaxyGUI.java
+ Description   The visual display - the GUI file
+ The GUI acts like a projector asking the model for the list of objects.
+ it loops through the list and asks each object to draw itself (no grid - positions are continuous / floating-point pixel coords)
+ 
+ It inherits from JPanel and will use a swing timer to advance the simulation
+ on each timer tick, updates simulation state and repaints the view
+ Provides controls for pausing, speeding up, slowing down the simulation
+ provide basic controls - start, pause, etc...)
+ 
+ delegates all drawing to the Celestial objects themselves
+ Displays temp explosion effects during collisions
+  @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
+ Date          5/29/2025
+ History Log    
+ *</pre>
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
   public class GalaxyGUI extends JPanel {

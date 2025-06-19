@@ -1,5 +1,25 @@
 package GalaxyProjectFinal;
 
+
+
+
+ /**
+ * Defines the behavior of Orbits for planets and moons - extends celestial
+ *               and contains properties for the center coordinates, radius, speed, and angle of the orbit
+ *
+ * <p><b>Project:</b> GalaxyProjectFinal</p>
+ * <p><b>Date:</b> 6/18/2025</p>
+ *
+ * @author Kaitlyn Le
+ * @author Ruth Karen Nakigozi
+ * @author Emma Dennis
+ * @see java.awt.Color
+ * @see java.awt.Graphics
+ * @see java.awt.Graphics2D
+ * @see java.util.Random
+ */
+ 
+ 
 // Uses a Orbit class that stores the XCenter coordinate, YCenter coordinate, radius, speed, and angle for the orbit
 // A Orbit class extends the superclass Celestial 
 public class Orbit extends Celestial {

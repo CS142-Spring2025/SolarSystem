@@ -1,6 +1,20 @@
 package GalaxyProjectFinal;
 import java.awt.*;
 
+/**
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *<pre>
+ Class        Celestial
+ File        Celestial.java
+ Description   Parent class for celestial objects in the galaxy simulation.
+               Contains common properties and methods for celestial objects.
+ @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
+ Date          5/29/2025
+ History Log    
+ *</pre>
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
 // Uses a Celestial class that stores an x coordinate, y coordinate, mass and size
 public class Celestial {
     private double x;

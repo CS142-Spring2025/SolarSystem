@@ -9,6 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *<pre>
+ * Class        Configuration
+ * File        Configuration.java
+ * Description   configuration file to save and manage placement of objects and saving to a file
+ * @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
+ * Date          5/29/2025
+ * History Log    
+ *</pre>
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
 public class Configuration {
     private List<Star> stars;
     private List<Planet> planets;

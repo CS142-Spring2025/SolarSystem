@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.Random;
 
 /**
+<<<<<<< Updated upstream
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *<pre>
  * Class         Asteroid
@@ -25,6 +26,25 @@ import java.util.Random;
 */
 
 
+=======
+ * Class representing an asteroid in the GalaxyProjectFinal simulation.
+ * Defines the behavior of an asteroid, which is randomly placed along
+ * the edges and moves inward. Handles collisions with other celestial bodies.
+ *
+ * <p><b>Project:</b> GalaxyProjectFinal</p>
+ * <p><b>Date:</b> 6/18/2025</p>
+ *
+ * @author Kaitlyn Le
+ * @author Ruth Karen Nakigozi
+ * @author Emma Dennis
+ * @see java.awt.Color
+ * @see java.awt.Graphics
+ * @see java.awt.Graphics2D
+ * @see java.util.Random
+ */
+
+ 
+>>>>>>> Stashed changes
 public class Asteroid extends Celestial {
     private double dx, dy, rotationAngle, rotationSpeed;
     private static final Random random = new Random();

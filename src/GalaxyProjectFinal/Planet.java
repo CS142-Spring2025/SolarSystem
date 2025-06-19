@@ -1,6 +1,23 @@
 package GalaxyProjectFinal;
-
 import java.awt.*;
+
+
+ /**
+ * Defines the behavior of planets
+ *               which orbit around a star
+ *
+ * <p><b>Project:</b> GalaxyProjectFinal</p>
+ * <p><b>Date:</b> 6/18/2025</p>
+ *
+ * @author Kaitlyn Le
+ * @author Ruth Karen Nakigozi
+ * @author Emma Dennis
+ * @see java.awt.Color
+ * @see java.awt.Graphics
+ * @see java.awt.Graphics2D
+ * @see java.util.Random
+ */
+
 
 
 // A Planet class extends the Orbit class, which is a subclass of Celestial

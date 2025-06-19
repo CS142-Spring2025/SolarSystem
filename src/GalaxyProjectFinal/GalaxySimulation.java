@@ -1,19 +1,22 @@
 package GalaxyProjectFinal;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Simulation class that tracks celestial objects, collisions and explosions
+ *
+ * <p><b>Project:</b> GalaxyProjectFinal</p>
+ * <p><b>Date:</b> 6/18/2025</p>
+ *
+ * @author Kaitlyn Le
+ * @author Ruth Karen Nakigozi
  * @author Emma Dennis
- * CIS142 - Final Project
- * 5/29/2025
+ * @see java.awt.Color
+ * @see java.awt.Graphics
+ * @see java.awt.Graphics2D
+ * @see java.util.Random
+ */
 
- * The "Brains" of the galaxy.  Will contain/manage all celestial objects / their interactions.
- *  The model provides:
- *  - updates object positions, handles collision logic
- *  - maintains a list of explosioons for rendering
- *  - is called repeatedly by the GUI timer to update the simulation
- **/
 public class GalaxySimulation {
     private List<Celestial> objects;           // list that holds all celestial objects
     private List<Explosion>  explosions = new ArrayList<>();  // active explosion

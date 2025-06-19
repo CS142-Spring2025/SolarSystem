@@ -3,19 +3,17 @@ package GalaxyProjectFinal;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
-/*
-
- * @author Emma Dennis
- * CIS142 - Final Project
- * 6/04/2025
- * 
- * Temporary explosion effect for collisions
- * - expands outward in a radius over time
- * - fades in transparency as it ages
- * - auto-deletes after a set time
- * 
- * used by Simulation and rended by the GUI
- * 
+/**
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *<pre>
+ * Class        Explosion
+ * File        Explosion.java
+ * Description   Defines behavior for explosrions when collisions occur
+ * @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
+ * Date          5/29/2025
+ * History Log    
+ *</pre>
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
 public class Explosion {
