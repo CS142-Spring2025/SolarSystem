@@ -54,7 +54,21 @@ public class GalaxySimulation {
                 if (b.isDestroyed()) continue;
 
                 // --- COMET hits anything: both destroyed ---
-                if (a instanceof Comet) {
+                if (a instanceof Comet || b instanceof Comet) {
+    Comet comet = (a instanceof Comet) ? (Comet) a : (Comet) b;
+    Celestial other = (a instanceof Comet) ? b : a;
+
+    if (!comet.isDestroyed() && !other.isDestroyed() && comet.collidesWith(other)) {
+        comet.setDestroyed(true);
+        other.setDestroyed(true);
+        explosions.add(new Explosion(comet.getX(), comet.getY()));
+        System.out.println(">>> Comet-Collision: destroying " + comet.getClass().getSimpleName() + " and " + other.getClass().getSimpleName());
+        continue;
+    }
+}
+
+/*older comet logic 
+if (a instanceof Comet) {
                     Comet comA = (Comet) a;
                     if (comA.collidesWith(b)) {
                         System.out.println(">>> Comet-Collision: destroying both "
@@ -80,7 +94,7 @@ public class GalaxySimulation {
                         continue;
                     }
                 }
-
+*/
                 // --- ASTEROID vs. ASTEROID: destroy both if they overlap ---
                 if (a instanceof Asteroid && b instanceof Asteroid) {
                     Asteroid astA = (Asteroid) a;

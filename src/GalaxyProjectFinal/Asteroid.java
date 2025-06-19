@@ -24,6 +24,7 @@ import java.util.Random;
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+
 public class Asteroid extends Celestial {
     private double dx, dy, rotationAngle, rotationSpeed;
     private static final Random random = new Random();
