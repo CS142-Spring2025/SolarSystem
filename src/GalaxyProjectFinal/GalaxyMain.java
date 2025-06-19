@@ -1,10 +1,16 @@
 package GalaxyProjectFinal;
-
 /**
- @author Ruth Karen Nakigozi 
- @author Kaitlyn Le
- @author Emma Dennis
- **/
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *<pre>
+ * Class        Main
+ * Description   The main menu that provides user interaction and initaially populates the galaxy
+ * @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
+ * Date          5/29/2025
+ * History Log    
+ *</pre>
+ *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
 
 import java.awt.BorderLayout;
 import java.io.IOException;
