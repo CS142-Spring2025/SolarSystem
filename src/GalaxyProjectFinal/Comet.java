@@ -4,18 +4,21 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Random;
 
-/**
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *<pre>
- Class        Comet
- File        Comet.java
- Description   Defines the behavior of Comets 
- @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
- Date          5/29/2025
- History Log    
- *</pre>
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ /**
+ * Defines the behavior of Comets 
+ *
+ * <p><b>Project:</b> GalaxyProjectFinal</p>
+ * <p><b>Date:</b> 6/18/2025</p>
+ *
+ * @author Kaitlyn Le
+ * @author Ruth Karen Nakigozi
+ * @author Emma Dennis
+ * @see java.awt.Color
+ * @see java.awt.Graphics
+ * @see java.awt.Graphics2D
+ * @see java.util.Random
  */
+
 
 public class Comet extends Celestial {
     private double dx, dy, tailLength;

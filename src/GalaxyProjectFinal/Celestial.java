@@ -1,19 +1,24 @@
 package GalaxyProjectFinal;
 import java.awt.*;
 
-/**
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *<pre>
- Class        Celestial
- File        Celestial.java
- Description   Parent class for celestial objects in the galaxy simulation.
-               Contains common properties and methods for celestial objects.
- @author       <i>Kaitlyn Le</i><i>Ruth Karen Nakigozi</i><i>Emma Dennis</i>
- Date          5/29/2025
- History Log    
- *</pre>
- *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ /**
+ * Class representing the details of a asteroid in a galaxy
+ *               simulation. Defines the behavior of an asteroid, randomly
+ *               places along the edges and moves inwards. Collisions may also occur
+ *               and shows when colliding with other celestial bodies.
+ *
+ * <p><b>Project:</b> GalaxyProjectFinal</p>
+ * <p><b>Date:</b> 6/18/2025</p>
+ *
+ * @author Kaitlyn Le
+ * @author Ruth Karen Nakigozi
+ * @author Emma Dennis
+ * @see java.awt.Color
+ * @see java.awt.Graphics
+ * @see java.awt.Graphics2D
+ * @see java.util.Random
  */
+
 
 // Uses a Celestial class that stores an x coordinate, y coordinate, mass and size
 public class Celestial {
